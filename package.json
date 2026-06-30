@@ -1,0 +1,13 @@
+{
+  "name": "educator-backend-server",
+  "version": "1.0.0",
+  "description": "Global Career & Education Intelligence Server for Educator AI Mentor",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
+  }
+}

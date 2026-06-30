@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Educator — App Icon</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #09090b;
+            color: #fafafa;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ══════════════════════════════════════
+           EDUCATOR APP ICON — SVG DEFINITION
+           Copy the <svg> inside .icon-educator
+           and use it anywhere in your app.
+           ══════════════════════════════════════ */
+
+        .icon-educator {
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+        /* ── Size Variants ── */
+        .icon-xs  { width: 20px; height: 20px; }
+        .icon-sm  { width: 28px; height: 28px; }
+        .icon-md  { width: 40px; height: 40px; }
+        .icon-lg  { width: 56px; height: 56px; }
+        .icon-xl  { width: 80px; height: 80px; }
+        .icon-2xl { width: 120px; height: 120px; }
+        .icon-3xl { width: 180px; height: 180px; }
+        .icon-4xl { width: 256px; height: 256px; }
+
+        /* ── Rounded corners per size ── */
+        .icon-xs  svg { border-radius: 5px; }
+        .icon-sm  svg { border-radius: 7px; }
+        .icon-md  svg { border-radius: 10px; }
+        .icon-lg  svg { border-radius: 13px; }
+        .icon-xl  svg { border-radius: 18px; }
+        .icon-2xl svg { border-radius: 26px; }
+        .icon-3xl svg { border-radius: 38px; }
+        .icon-4xl svg { border-radius: 52px; }
+
+        /* ── Circle variant ── */
+        .icon-circle svg { border-radius: 50% !important; }
+
+        /* ── Shadow variants ── */
+        .icon-shadow-sm svg { box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
+        .icon-shadow-md svg { box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
+        .icon-shadow-lg svg { box-shadow: 0 4px 20px rgba(59,130,246,0.2), 0 2px 8px rgba(0,0,0,0.3); }
+
+        /* ── Hover effect ── */
+        .icon-educator svg {
+            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+                        box-shadow 0.25s ease;
+        }
+        .icon-hover:hover svg {
+            transform: scale(1.08);
+        }
+        .icon-hover:active svg {
+            transform: scale(0.96);
+        }
+
+        /* ── Splash animation ── */
+        @keyframes iconEnter {
+            0% { opacity: 0; transform: scale(0.7); }
+            60% { transform: scale(1.05); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        .icon-animate svg {
+            animation: iconEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* ── Pulse ring (for loading states) ── */
+        @keyframes pulseRing {
+            0% { transform: scale(0.9); opacity: 0.5; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+        .icon-loading {
+            position: relative;
+        }
+        .icon-loading::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            border: 2px solid rgba(59,130,246,0.4);
+            animation: pulseRing 1.5s ease-out infinite;
+        }
+        .icon-loading svg { border-radius: inherit !important; position: relative; z-index: 1; }
+
+        /* ══════════════════════════════════════
+           DEMO PAGE STYLES (remove these
+           when copying icon into your app)
+           ══════════════════════════════════════ */
+
+        .demo-section {
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            padding: 48px 32px;
+        }
+        .demo-section:last-child { border-bottom: none; }
+        .demo-container { max-width: 880px; margin: 0 auto; }
+        .demo-label {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.3);
+            margin-bottom: 24px;
+        }
+        .demo-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 22px;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+        }
+        .demo-desc {
+            font-size: 14px;
+            color: rgba(255,255,255,0.35);
+            margin-bottom: 32px;
+            max-width: 480px;
+            line-height: 1.6;
+        }
+        .demo-row {
+            display: flex;
+            align-items: flex-end;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+        .demo-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        .demo-item span {
+            font-size: 11px;
+            font-family: 'JetBrains Mono', monospace;
+            color: rgba(255,255,255,0.2);
+        }
+        .demo-context {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 20px;
+            background: #111113;
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 14px;
+            max-width: 480px;
+        }
+        .demo-context-text h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+        .demo-context-text p {
+            font-size: 12px;
+            color: rgba(255,255,255,0.3);
+        }
+        .demo-code {
+            background: #111113;
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 12px;
+            padding: 20px 24px;
+            overflow-x: auto;
+            margin-top: 24px;
+        }
+        .demo-code pre {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            line-height: 1.7;
+            color: rgba(255,255,255,0.5);
+        }
+        .demo-code .tag { color: #60a5fa; }
+        .demo-code .attr { color: #fbbf24; }
+        .demo-code .val { color: #34d399; }
+        .demo-code .cmt { color: rgba(255,255,255,0.2); }
+
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 16px;
+        }
+        .demo-grid-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            padding: 24px 16px;
+            background: #111113;
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 14px;
+        }
+        .demo-grid-card span {
+            font-size: 11px;
+            font-family: 'JetBrains Mono', monospace;
+            color: rgba(255,255,255,0.2);
+            text-align: center;
+        }
+
+        /* Splash screen demo */
+        .demo-splash {
+            width: 280px;
+            height: 480px;
+            background: #09090b;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 32px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+        .demo-splash::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 50% 40%, rgba(59,130,246,0.06) 0%, transparent 60%);
+        }
+        .demo-splash * { position: relative; z-index: 1; }
+        .demo-splash-text {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            color: rgba(255,255,255,0.5);
+        }
+        @keyframes splashDot {
+            0%, 80%, 100% { opacity: 0.2; }
+            40% { opacity: 1; }
+        }
+        .splash-dots {
+            display: flex;
+            gap: 6px;
+        }
+        .splash-dots span {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            animation: splashDot 1.2s ease-in-out infinite;
+        }
+        .splash-dots span:nth-child(2) { animation-delay: 0.15s; }
+        .splash-dots span:nth-child(3) { animation-delay: 0.3s; }
+
+        /* Notification badge demo */
+        .demo-notif {
+            position: relative;
+            display: inline-block;
+        }
+        .demo-notif-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            width: 14px;
+            height: 14px;
+            background: #ef4444;
+            border-radius: 50%;
+            border: 2px solid #09090b;
+            font-size: 8px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        /* Toolbar demo */
+        .demo-toolbar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            background: #111113;
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 14px;
+            width: fit-content;
+        }
+        .demo-toolbar-divider {
+            width: 1px;
+            height: 24px;
+            background: rgba(255,255,255,0.06);
+        }
+        .demo-toolbar-item {
+            width: 20px;
+            height: 20px;
+            border-radius: 5px;
+            background: rgba(255,255,255,0.06);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ═══════════════════════════════════════════
+         ICON SIZES SHOWCASE
+         ═══════════════════════════════════════════ -->
+    <div class="demo-section">
+        <div class="demo-container">
+            <p class="demo-label">Icon System</p>
+            <h2 class="demo-title">All Sizes</h2>
+            <p class="demo-desc">The icon scales from 20px toolbar size up to 256px splash screen. Border radius adjusts proportionally.</p>
+
+            <div class="demo-row">
+                <div class="demo-item">
+                    <div class="icon-educator icon-xs icon-hover">
+                        <svg width="20" height="20" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="36" height="36" rx="5" fill="url(#grad1)"/>
+                            <path d="M18 13C18 13 13.2 11.5 9.5 13V25C13.2 23.5 18 25 18 25C18 25 22.8 23.5 26.5 25V13C22.8 11.5 18 13 18 13Z" fill="white" fill-opacity="0.15" stroke="white" stroke-width="1.1" stroke-linejoin="round"/>
+                            <path d="M18 13.2V24.8" stroke="white" stroke-opacity="0.3" stroke-width="0.8"/>
+                            <line x1="11.8" y1="16.8" x2="16.2" y2="15.7" stroke="white" stroke-width="0.7" stroke-opacity="0.45" stroke-linecap="round"/>
+                            <line x1="11.8" y1="19.6" x2="16.2" y2="18.5" stroke="white" stroke-width="0.7" stroke-opacity="0.45" stroke-linecap="round"/>
+                            <line x1="11.8" y1="22.4" x2="15.2" y2="21.5" stroke="white" stroke-width="0.7" stroke-opacity="0.45" stroke-linecap="round"/>
+                            <circle cx="18" cy="8.5" r="1.5" fill="#FCD34D"/>
+                            <circle cx="18" cy="8.5" r="4" fill="#FCD34D" fill-opacity="0.12"/>
+                            <defs><linearGradient id="grad1" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse"><stop stop-color="#3b82f6"/><stop offset="1" stop-color="#1d4ed8"/></linearGradient></defs>
+                        </svg>
+                    </div>
+                    <span>20px</span>
+                </div>
+
+                <div class="demo-item">
+                    <div class="icon-educator icon-sm icon-hover">
+                        <svg width="28" height="28" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="36" height="36" rx="7" fill="url(#grad2)"/>
+                            <path d="M18 13C18 13 13.2 11.5 9.5 13V25C13.2 23.5 18 25 18 25C18 25 22.8 23.5 26.5 25V13C22.8 11.5 18 13 18 13Z" fill="white" fill-opacity="0.15" stroke="white" stroke-width="1.1" stroke-linejoin="round"/>
+                            <path d="M18 13.2V24.8" stroke="white" stroke-opacity="0.3" stroke-width="0.8"/>
+                            <line x1="11.8" y1="16.8" x2="16.2" y2="15.7" stroke="white" stroke-width="0.7" stroke-opacity="0.45" stroke-linecap="round"/>
+                            <line x1="11.8" y1="19.6" x2="16.2" y2="18.5" stroke="white" stroke-width="0.7" stroke-opacity="0.45" stroke-linecap="round"/>
+                            <line x1="11.8" y1="22.4" x2="15.2" y2="21.5" stroke="white" stroke-width="0.7" stroke-opacity="0.45" stroke-linecap="round"/>
+                            <circle cx="18" cy="8.5" r="1.5" fill="#FCD34D"/>
+                            <circle cx="18" cy="8.5" r="4" fill="#FCD34D" fill-opacity="0.12"/>
+                            <defs><linearGradient id="grad2" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse"><stop stop-color="#3b82f6"/><stop offset="1" stop-color="#1d4ed8"/></linearGradient></defs>
+                        </svg>
+                    </div>
+                    <span>28px</span>
+                </div>
+
+                <div class="demo-item">
+                    <div class="icon-educator icon-md icon-hover">
+                        <svg width="40" height="40" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="36" height="36" rx="10" fill="url(#grad3)"/>
+                            <path d="M18 13C18 13 13.2 11.5 9.5 13V25C13.2 23.5 18 25 18 25C18 25 22.8 23.5 26.5 25V13C22.8 11.5 18 13 18 13Z" fill="white" fill-opacity="0.15" stroke="white" stroke-width="1.1" stroke-linejoin="round"/>
+                            <path d="M18 13.2V24.8" stroke="white" stroke-opacity="0.3" stroke-width="0.8"/>
+                            <line x1="11.8" y1="16.8" x2="16.2" y2="15.7" stroke="white" stroke-width="0.7" stroke-opacity="0.45" stroke-linecap="round"/>
+                            <line x1="11.8" y1="19.6" x2="16.2" y2="18.5" stroke="white" stroke-width="0.7" stroke-opacity="0.45" stroke-linecap="round"/>
+                            <line x1="11.8" y1="22.4" x2="15.2" y2="21.5" stroke="white" stroke-width="0.7" stroke-opacity="0.45" stroke-linecap="round"/>
+                            <circle cx="18" cy="8.5" r="1.5" fill="#FCD34D"/>
+                            <circle cx="18" cy="8.5" r="4" fill="#FCD34D" fill-opacity="0.12"/>
+                            <defs><linearGradient id="grad3" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse"><stop stop-color="#3b82f6"/><stop offset="1" stop-color="#1d4ed8"/></linearGradient></defs>
+                        </svg>
+                    </div>
+                    <span>40px</span>
+                </div>
+
+                <div class="demo-item">
+                    <div class="icon-educator icon-lg icon-hover">
+                        <svg width="56" height="56" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="36" height="36" rx="13" fill="url(#grad4)"/>
+                            <path d="M18 13C18 13 13.2 11.5 9.5 13V25C13.2 23.5 18 25 18 25C18 25 22.8 23.5 26.5 25V13C22.8 11.5 18 13 18 13Z" fill="white" fill-opacity="0.15" stroke="white" stroke-width="1.1" stroke-linejoin="round"/>
+                            <path d="M18 13.2V24.8" stroke="white" stroke-opacity="0.3" stroke-width="0.8"/>
+                            <line x1="11.8" y1="16.8" x2="16.2" y2="15.7" stroke="white" stroke-width="0.7" stroke-opacity="0.45" stroke-linecap="round"/>
+                            <line x1="11.8" y1="19.6" x2="16.2" y2="18.5" stroke="white" stroke-width="0.7" stroke-opacity="0.45" stroke-linecap="round"/>
+                            <line x1="11.8" y1="22.4" x2="15.2" y2="21.5" stroke="white" stroke-width="0.7" stroke-opacity="0.45" stroke-linecap="round"/>
+                            <circle cx="18" cy="8.5" r="1.5" fill="#FCD34D"/>
+                            <circle cx="18" cy="8.5" r="4" fill="#FCD34D" fill-opacity="0.12"/>
+                            <defs><linearGradient id="grad4" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse"><stop stop-color="#3b82f6"/><stop offset="1" stop-color="#1d4ed8"/></linearGradient></defs>
+                        </svg>
+                    </div>
+                    <span>56px</span>
+                </div>
+
+                <div class="demo-item">
+                    <div class="icon-educator icon-xl icon-hover">
+                        <svg width="80" height="80" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="36" height="36" rx="18" fill="url(#grad5)"/>
+                            <path d="M18 13C18 13 13.2 11.5 9.5 13V25C13.2 23.5 18 25 18 25C18 25 22.8 23.5 26.5 25V13C22.8 11.5 18 13 18 13Z" fill="white" fill-opacity="0.15" stroke="white" stroke-width="1.1" stroke-linejoin="round"/>
+                            <path d="M18 13.2V24.8" stroke="white" stroke-opacity="0.3" stroke-width="0.8"/>
+                            <line x1="11.8" y1="16.8" x2="16.2" y2="15.7" stroke="white" stroke-width="0.7" stroke-opacity="0.45" stroke-linecap="round"/>
+                            <line x1="11.8" y1="19.6" x2="16.2" y2="18.5" stroke="white" stroke-width="0.7" stroke-opacity="0.45" stroke-linecap="round"/>
+                            <line x1="11.8" y1="22.4" x2="15.2" y2="21.5" stroke="white" stroke-width="0.7" stroke-opacity="0.45" stroke-linecap="round"/>
+                            <circle cx="18" cy="8.5" r="1.5" fill="#FCD34D"/>
+                            <circle cx="18" cy="8.5" r="4" fill="#FCD34D" fill-opacity="0.12"/>
+                            <defs><linearGradient id="grad5" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse"><stop stop-color="#3b82f6"/><stop offset="1" stop-color="#1d4ed8"/></linearGradient></defs>
+                        </svg>
+                    </div>
+                    <span>80px</span>
+                </div>
+
+                <div class="demo-item">
+                    <div class="icon-educator icon-2xl icon-hover">
+                        <svg width="120" height="120" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="36" height="36" rx="26" fill="url(#grad6)"/>
+                            <path d="M18 13C18 13 13.2 11.5 9.5 13V25C13.2 23.5 18 25 18 25C18 25 22.8 23.5 26.5 25V13C22.8 11.5 18 13 18 13Z" fill="white" fill-opacity="0.15" stroke="white" stroke-width="1.1" stroke-linejoin="round"/>
+                            <path d="M18 13.2V24.8" stroke="white" stroke-opacity="0.3" stroke-width="0.8"/>
+                            <line x1="11.8" y1="16.8" x2="16.2" y2="15.7" stroke="white" stroke-width="0.7" stroke-opacity="0.45" stroke-linecap="round"/>
+                            <line x1="11.8" y1="19.6" x2="16.2" y2="18.5" stroke="white" stroke-width="0.7" stroke-opacity="0.45" stroke-linecap="round"/>
+                            <line x1="11.8" y1="22.4" x2="15.2" y2="21.5" stroke="white" stroke-width="0.7" stroke-opacity="0.45" stroke-linecap="round"/>
+                            <circle cx="18" cy="8.5" r="1.5" fill="#FCD34D"/>
+                            <circle cx="18" cy="8.5" r="4" fill="#FCD34D" fill-opacity="0.12"/>
+                            <defs><linearGradient id="grad6" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse"><stop stop-color="#3b82f6"/><stop offset="1" stop-color="#1d4ed8"/></linearGradient></defs>
+                        </svg>
+                    </div>
+                    <span>120px</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         APP CONTEXTS
+         ═══════════════════════════════════════════ -->
+    <div class="demo-section">
+        <div class="demo-container">
+            <p class="demo-label">Usage Contexts</p>
+            <h2 class="demo-title">Inside Your App</h2>
+            <p class="demo-desc">How the icon looks in real app contexts — toolbar, sidebar, splash screen, notifications.</p>
+
+            <div style="display: flex; gap: 32px; flex-wrap: wrap; align-items: flex-start;">
+
+                <!-- Splash Screen -->
+                <div>
+                    <div class="demo-splash">
+                        <div class="icon-educator icon-xl icon-animate icon-shadow-lg">
+                            <svg width="80" height="80" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="36" height="36" rx="18" fill="url(#gradS1)"/>
+                                <path d="M18 13C18 13 13.2 11.5 9.5 13V25C13.2 23.5 18 25 18 25C18 25 22.8 23.5 26.5 25V13C22.8 11.5 18 13 18 13Z" fill="white" fill-opacity="0.15" stroke="white" stroke-width="1.1" stroke-linejoin="round"/>
+                                <path d="M18 13.2V24.8" stroke="white" stroke-opacity="0.3" stroke-width="0.8"/>
+                                <line x1="11.8" y1="16.8" x2="16.2" y2="15.7" stroke="white" stroke-width="0.7" stroke-opacity="0.45" stroke-linecap="round"/>
+                                <line x1="11.8" y1="19.6" x2="16.2" y2="18.5" stroke="white" stroke-width="0.7" stroke-opacity="0.45" stroke-linecap="round"/>
+                                <line x1="11.8" y1="22.4" x2="15.2" y2="21.5" stroke="white" stroke-width="0.7" stroke-opacity="0.45" stroke-linecap="round"/>
+                                <circle cx="18" cy="8.5" r="1.5" fill="#FCD34D"/>
+                                <circle cx="18" cy="8.5" r="4" fill="#FCD34D" fill-opacity="0.12"/>
+                                <defs><linearGradient id="gradS1" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse"><stop stop-color="#3b82f6"/><stop offset="1" stop-color="#1d4ed8"/></linearGradient></defs>
+                            </svg>
+                        </div>
+                        <div class="demo-splash-text">Educator</div>
+                        <div class="splash-dots">
+                            <span></span><span></span><span></span>
+                        </div>
+                    </div>
+                    <p style="text-align:center; font-size:11px; color:rgba(255,255,255,0.2); margin-top:10px; font-family:'JetBrains Mono',monospace;">Splash Screen</p>
+                </div>
+
+                <!-- Context demos -->
+                <div style="display: flex; flex-direction: column; gap: 12px; flex: 1; min-width: 260px;">
+
+                    <!-- Sidebar -->
+                    <div class="demo-context">
+                        <div class="icon-educator icon-sm icon-hover">
+                            <svg width="28" height="28" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="36" height="36" rx="7" fill="url(#gradC1)"/>
+                                <path d="M18 13C18 13 13.2 11.5 9.5 13V25C13.2 23.5 18 25 18 25C18 25 22.8 23.5 26.5 25V13C22.8 11.5 18 13 18 13Z" fill="white" fill-opacity="0.15" stroke="white" stroke-width="1.1" stroke-linejoin="round"/>
+                                <path d="M18 13.2V24.8" stroke="white" stroke-opacity="0.3" stroke-width="0.8"/>
+                                <circle cx="18" cy="8.5" r="1.5" fill="#FCD34D"/>
+                                <defs><linearGradient id="gradC1" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse"><stop stop-color="#3b82f6"/><stop offset="1" stop-color="#1d4ed8"/></linearGradient></defs>
+                            </svg>
+                        </div>
+                        <div class="demo-context-text">
+                            <h4>Educator</h4>
+                            <p>Sidebar navigation</p>
+                        </div>
+                    </div>
+
+                    <!-- Toolbar -->
+                    <div class="demo-toolbar">
+                        <div class="icon-educator icon-xs">
+                            <svg width="20" height="20" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="36" height="36" rx="5" fill="url(#gradC2)"/>
+                                <path d="M18 13C18 13 13.2 11.5 9.5 13V25C13.2 23.5 18 25 18 25C18 25 22.8 23.5 26.5 25V13C22.8 11.5 18 13 18 13Z" fill="white" fill-opacity="0.15" stroke="white" stroke-width="1.1" stroke-linejoin="round"/>
+                                <path d="M18 13.2V24.8" stroke="white" stroke-opacity="0.3" stroke-width="0.8"/>
+                                <circle cx="18" cy="8.5" r="1.5" fill="#FCD34D"/>
+                                <defs><linearGradient id="gradC2" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse"><stop stop-color="#3b82f6"/><stop offset="1" stop-color="#1d4ed8"/></linearGradient></defs>
+                            </svg>
+                        </div>
+                        <div class="demo-toolbar-divider"></div>
+                        <div class="demo-toolbar-item"></div>
+                        <div class="demo-toolbar-item"></div>
+                        <div class="demo-toolbar-item"></div>
+                        <div style="flex:1;"></div>
+                        <div class="icon-educator icon-xs">
+                            <svg width="20" height="20" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="36" height="36" rx="5" fill="url(#gradC3)"/>
+                                <circle cx="18" cy="18" r="6" fill="white" fill-opacity="0.2"/>
+                                <defs><linearGradient id="gradC3" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse"><stop stop-color="#3b82f6"/><stop offset="1" stop-color="#1d4ed8"/></linearGradient></defs>
+                            </svg>
+                        </div>
+                    </div>
+                    <p style="font-size:11px; color:rgba(255,255,255,0.2); margin-top:-4px; padding-left:4px; font-family:'JetBrains Mono',monospace;">Toolbar</p>
+
+                    <!-- With notification -->
+                    <div class="demo-context">
+                        <div class="demo-notif">
+                            <div class="icon-educator icon-md icon-hover">
+                                <svg width="40" height="40" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="36" height="36" rx="10" fill="url(#gradC4)"/>
+                                    <path d="M18 13C18 13 13.2 11.5 9.5 13V25C13.2 23.5 18 25 18 25C18 25 22.8 23.5 26.5 25V13C22.8 11.5 18 13 18 13Z" fill="white" fill-opacity="0.15" stroke="white" stroke-width="1.1" stroke-linejoin="round"/>
+                                    <path d="M18 13.2V24.8" stroke="white" stroke-opacity="0.3" stroke-width="0.8"/>
+                                    <circle cx="18" cy="8.5" r="1.5" fill="#FCD34D"/>
+                                    <defs><linearGradient id="gradC4" x1="0" y1="0" x2="36
