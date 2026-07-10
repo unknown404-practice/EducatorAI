@@ -2161,7 +2161,7 @@ function triggerCategoryGuidance(stage) {
   appendChatMessage('user', '🎓 I need exact official roadmap and guidance for <strong>' + esc(stage) + '</strong>.');
   var matched = matchClientCareer(stage);
   var tierQuery = '&tier=' + encodeURIComponent(window.HARDWARE_TIER || 'workstation');
-  var apiUrl = (window.location.port === '3000' || window.location.protocol === 'http:') ? '/api/career-guide?query=' + encodeURIComponent(stage) + tierQuery : 'http://localhost:3000/api/career-guide?query=' + encodeURIComponent(stage) + tierQuery;
+  var apiUrl = (window.location.protocol === 'file:') ? 'http://localhost:3000/api/career-guide?query=' + encodeURIComponent(stage) + tierQuery : '/api/career-guide?query=' + encodeURIComponent(stage) + tierQuery;
   
   fetch(apiUrl)
     .then(function(res){ return res.json(); })
@@ -2200,7 +2200,7 @@ function processAIChat(userInput) {
   }
 
   var tierQuery = '&tier=' + encodeURIComponent(window.HARDWARE_TIER || 'workstation');
-  var apiUrl = (window.location.port === '3000' || window.location.protocol === 'http:') ? '/api/career-guide?query=' + encodeURIComponent(userInput) + tierQuery : 'http://localhost:3000/api/career-guide?query=' + encodeURIComponent(userInput) + tierQuery;
+  var apiUrl = (window.location.protocol === 'file:') ? 'http://localhost:3000/api/career-guide?query=' + encodeURIComponent(userInput) + tierQuery : '/api/career-guide?query=' + encodeURIComponent(userInput) + tierQuery;
   
   fetch(apiUrl)
     .then(function(res){ return res.json(); })
