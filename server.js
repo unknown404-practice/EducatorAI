@@ -2192,6 +2192,18 @@ app.get('/api/career-guide', async (req, res) => {
   }
 });
 
+// Dedicated lightweight endpoint for Step 4 Keep-Alive / Uptime Monitor (UptimeRobot / cron-job.org)
+app.get(['/api/ping', '/api/health'], (req, res) => {
+  res.status(200).json({
+    success: true,
+    status: 'ONLINE',
+    service: 'Educator AI Intelligence Gateway',
+    uptime: Math.floor(process.uptime()),
+    timestamp: new Date().toISOString(),
+    message: '200% Keep-Alive Heartbeat Active - Container Awake'
+  });
+});
+
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'landingpage.html'));
 });
