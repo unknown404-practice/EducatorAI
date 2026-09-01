@@ -10,4 +10,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Ping Server
-        run: curl -s https://educator-ai-jolp.onrender.com/api/ping
+        run: curl -s -f https://educator-ai-jolp.onrender.com/api/ping
