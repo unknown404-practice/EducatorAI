@@ -2157,30 +2157,83 @@ function matchClientCareer(query) {
   return null;
 }
 
+function fetchFromEducatorAPI(queryText, callback) {
+  var tierQuery = '&tier=' + encodeURIComponent(window.HARDWARE_TIER || 'workstation');
+  var cloudUrl = 'https://educator-ai-jolp.onrender.com/api/career-guide?query=' + encodeURIComponent(queryText) + tierQuery;
+
+  // 1. If hosted directly on Render cloud server, use relative path directly
+  if (window.location.hostname && window.location.hostname.indexOf('onrender.com') !== -1) {
+    fetch('/api/career-guide?query=' + encodeURIComponent(queryText) + tierQuery)
+      .then(function(res){ if (!res.ok) throw new Error('HTTP ' + res.status); return res.json(); })
+      .then(function(json){ callback(null, json); })
+      .catch(function(err){ callback(err); });
+    return;
+  }
+
+  // 2. If running locally on localhost or 127.0.0.1
+  if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    fetch('/api/career-guide?query=' + encodeURIComponent(queryText) + tierQuery)
+      .then(function(res){ if (!res.ok) throw new Error('HTTP ' + res.status); return res.json(); })
+      .then(function(json){ callback(null, json); })
+      .catch(function(){
+        // Local failed, fallback seamlessly to live Render Cloud API
+        fetch(cloudUrl)
+          .then(function(res){ return res.json(); })
+          .then(function(json){ callback(null, json); })
+          .catch(function(err){ callback(err); });
+      });
+    return;
+  }
+
+  // 3. If opened via file:/// or on GitHub Pages / Netlify:
+  // Try local port 3000 / 3001 with a short timeout, and if unreachable or 404, fallback to live Render Cloud API!
+  var primaryLocal = 'http://localhost:3000/api/career-guide?query=' + encodeURIComponent(queryText) + tierQuery;
+  var altLocal = 'http://localhost:3001/api/career-guide?query=' + encodeURIComponent(queryText) + tierQuery;
+
+  var controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+  var timer = controller ? setTimeout(function(){ controller.abort(); }, 1200) : null;
+
+  fetch(primaryLocal, controller ? { signal: controller.signal } : {})
+    .then(function(res){
+      if (timer) clearTimeout(timer);
+      if (!res.ok) throw new Error('Local 3000 non-200');
+      return res.json();
+    })
+    .then(function(json){ callback(null, json); })
+    .catch(function(){
+      if (timer) clearTimeout(timer);
+      var c2 = typeof AbortController !== 'undefined' ? new AbortController() : null;
+      var t2 = c2 ? setTimeout(function(){ c2.abort(); }, 1200) : null;
+      fetch(altLocal, c2 ? { signal: c2.signal } : {})
+        .then(function(res){
+          if (t2) clearTimeout(t2);
+          if (!res.ok) throw new Error('Local 3001 non-200');
+          return res.json();
+        })
+        .then(function(json){ callback(null, json); })
+        .catch(function(){
+          if (t2) clearTimeout(t2);
+          fetch(cloudUrl)
+            .then(function(res){ return res.json(); })
+            .then(function(json){ callback(null, json); })
+            .catch(function(err){ callback(err); });
+        });
+    });
+}
+
 function triggerCategoryGuidance(stage) {
   appendChatMessage('user', '🎓 I need exact official roadmap and guidance for <strong>' + esc(stage) + '</strong>.');
   var matched = matchClientCareer(stage);
-  var tierQuery = '&tier=' + encodeURIComponent(window.HARDWARE_TIER || 'workstation');
-  var apiUrl = (window.location.protocol === 'file:') ? 'http://localhost:3000/api/career-guide?query=' + encodeURIComponent(stage) + tierQuery : '/api/career-guide?query=' + encodeURIComponent(stage) + tierQuery;
-  
-  fetch(apiUrl)
-    .then(function(res){ return res.json(); })
-    .then(function(json){
-      if (json && json.success && json.data) {
-        applyCareerData(json.data, stage);
-      } else if (matched) {
-        applyCareerData(matched, stage);
-      } else {
-        processAIChatFallback(stage);
-      }
-    })
-    .catch(function(){
-      if (matched) {
-        applyCareerData(matched, stage);
-      } else {
-        processAIChatFallback(stage);
-      }
-    });
+
+  fetchFromEducatorAPI(stage, function(err, json) {
+    if (!err && json && json.success && json.data) {
+      applyCareerData(json.data, stage);
+    } else if (matched) {
+      applyCareerData(matched, stage);
+    } else {
+      processAIChatFallback(stage);
+    }
+  });
 }
 
 function processAIChat(userInput) {
@@ -2199,30 +2252,18 @@ function processAIChat(userInput) {
     if (eiState.prefix) matched.bio = eiState.prefix + (matched.bio || '');
   }
 
-  var tierQuery = '&tier=' + encodeURIComponent(window.HARDWARE_TIER || 'workstation');
-  var apiUrl = (window.location.protocol === 'file:') ? 'http://localhost:3000/api/career-guide?query=' + encodeURIComponent(userInput) + tierQuery : '/api/career-guide?query=' + encodeURIComponent(userInput) + tierQuery;
-  
-  fetch(apiUrl)
-    .then(function(res){ return res.json(); })
-    .then(function(json){
-      if (json && json.isGreeting) {
-        appendChatMessage('mentor', json.message, json.emotionBadge || eiState.emotionBadge);
-      } else if (json && json.success && json.data) {
-        if (!json.data.emotionBadge) json.data.emotionBadge = eiState.emotionBadge;
-        applyCareerData(json.data, userInput);
-      } else if (matched) {
-        applyCareerData(matched, userInput);
-      } else {
-        processAIChatFallback(userInput, eiState);
-      }
-    })
-    .catch(function(){
-      if (matched) {
-        applyCareerData(matched, userInput);
-      } else {
-        processAIChatFallback(userInput, eiState);
-      }
-    });
+  fetchFromEducatorAPI(userInput, function(err, json) {
+    if (!err && json && json.isGreeting) {
+      appendChatMessage('mentor', json.message, json.emotionBadge || eiState.emotionBadge);
+    } else if (!err && json && json.success && json.data) {
+      if (!json.data.emotionBadge) json.data.emotionBadge = eiState.emotionBadge;
+      applyCareerData(json.data, userInput);
+    } else if (matched) {
+      applyCareerData(matched, userInput);
+    } else {
+      processAIChatFallback(userInput, eiState);
+    }
+  });
 }
 
 function processAIChatFallback(userInput, eiPassed) {

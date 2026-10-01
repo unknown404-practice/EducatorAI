@@ -833,30 +833,27 @@ function detectCareerCategory(query) {
 const DEVICE_MODEL_TIERS = {
   // Tier 1: Strong Laptop, High-end PC, MacBook Workstation
   workstation: [
-    'openai/gpt-oss-120b',
-    'google/gemma-4-26b-a4b',
+    'openrouter/free',
+    'nvidia/nemotron-3.5-lightning:free',
+    'qwen/qwen3.8-27b:free',
+    'google/gemma-4-31b-it:free',
     'google/gemma-4-26b-a4b-it:free',
-    'meta-llama/llama-3.3-70b-instruct:free',
-    'qwen/qwen3-coder:free',
-    'qwen/qwen-2.5-72b-instruct',
-    'meta-llama/llama-3-8b-instruct:free'
+    'openai/gpt-oss-120b'
   ],
   // Tier 2: Modern Mobile, iPhone, Android, Tablet
   mobile: [
-    'zhipuai/glm-4-flash',
-    'openai/gpt-oss-120b',
-    'google/gemma-4-26b-a4b-it:free',
-    'qwen/qwen3-coder:free',
-    'meta-llama/llama-3.3-70b-instruct:free',
-    'meta-llama/llama-3-8b-instruct:free'
+    'openrouter/free',
+    'nvidia/nemotron-3.5-lightning:free',
+    'qwen/qwen3.8-27b:free',
+    'google/gemma-4-31b-it:free',
+    'google/gemma-4-26b-a4b-it:free'
   ],
   // Tier 3: Legacy / 10-year-old mobile / Windows 7 PC / Low RAM (< 4GB)
   legacy: [
-    'meta-llama/llama-3-8b-instruct:free',
-    'google/gemma-4-26b-a4b-it:free',
-    'qwen/qwen3-coder:free',
-    'zhipuai/glm-4-flash',
-    'google/gemma-7b-it:free'
+    'openrouter/free',
+    'nvidia/nemotron-3.5-lightning:free',
+    'qwen/qwen3.8-27b:free',
+    'google/gemma-4-31b-it:free'
   ]
 };
 
@@ -888,14 +885,14 @@ function getActiveApiKeys() {
 async function callEQEngine(systemPrompt, studentMessage) {
   const apiKeys = getActiveApiKeys();
   const eqModels = [
-    process.env.NEXT_PUBLIC_AI_MODEL || 'openai/gpt-oss-120b',
+    process.env.NEXT_PUBLIC_AI_MODEL,
+    'openrouter/free',
+    'nvidia/nemotron-3.5-lightning:free',
+    'qwen/qwen3.8-27b:free',
+    'google/gemma-4-31b-it:free',
     'google/gemma-4-26b-a4b-it:free',
-    'meta-llama/llama-3.3-70b-instruct:free',
-    'qwen/qwen3-coder:free',
-    'google/gemma-2-27b-it',
-    'zhipuai/glm-4-flash',
-    'meta-llama/llama-3-8b-instruct:free'
-  ];
+    'openai/gpt-oss-120b'
+  ].filter(Boolean);
 
   for (const model of eqModels) {
     if (!model) continue;
@@ -924,11 +921,14 @@ async function callEQEngine(systemPrompt, studentMessage) {
         if (response.ok) {
           const json = await response.json();
           if (json.choices && json.choices.length > 0 && json.choices[0].message) {
-            console.log(`[Educator AI EQ Engine] Successfully synthesized EQ response via: ${model}`);
-            return {
-              content: json.choices[0].message.content,
-              model: model
-            };
+            const rawContent = json.choices[0].message.content || json.choices[0].message.reasoning;
+            if (rawContent && typeof rawContent === 'string' && rawContent.trim()) {
+              console.log(`[Educator AI EQ Engine] Successfully synthesized EQ response via: ${model}`);
+              return {
+                content: rawContent.trim(),
+                model: model
+              };
+            }
           }
         } else if (response.status === 401 || response.status === 429) {
           console.warn(`[Educator AI EQ Engine] Key or rate limit on ${model} (status ${response.status}). Rotating API key...`);
@@ -1011,12 +1011,15 @@ async function callOpenRouterAI(systemPrompt, userPrompt, tier = 'workstation') 
         if (response.ok) {
           const json = await response.json();
           if (json.choices && json.choices.length > 0 && json.choices[0].message) {
-            console.log(`[Multi-Provider API Router] Successfully routed & synthesized response via: ${model}`);
-            return {
-              content: json.choices[0].message.content,
-              model: model,
-              tier: tier
-            };
+            const rawContent = json.choices[0].message.content || json.choices[0].message.reasoning;
+            if (rawContent && typeof rawContent === 'string' && rawContent.trim()) {
+              console.log(`[Multi-Provider API Router] Successfully routed & synthesized response via: ${model}`);
+              return {
+                content: rawContent.trim(),
+                model: model,
+                tier: tier
+              };
+            }
           }
         } else if (response.status === 401 || response.status === 429) {
           console.warn(`[Multi-Provider API Router] Key/Rate limit on ${model} (status ${response.status}). Rotating API key...`);
@@ -2212,6 +2215,19 @@ app.get('/app', (req, res) => {
   res.sendFile(path.join(__dirname, 'Educator.html'));
 });
 
-app.listen(PORT, () => {
-  console.log(`Educator Intelligence Backend Server running on http://localhost:${PORT}`);
-});
+function startServer(portToTry) {
+  const srv = app.listen(portToTry, () => {
+    console.log(`Educator Intelligence Backend Server running on http://localhost:${portToTry}`);
+  });
+  srv.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+      const nextPort = Number(portToTry) + 1;
+      console.warn(`[Port Conflict] Port ${portToTry} is in use (e.g. Docker/WSL). Automatically binding to http://localhost:${nextPort}...`);
+      startServer(nextPort);
+    } else {
+      console.error('[Server Error]', err);
+    }
+  });
+}
+
+startServer(PORT);
