@@ -1,0 +1,550 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#f2f2f7">
+<title>Educator &mdash; Career Mentor</title>
+<script data-od-sandbox-shim>(function(){
+  function makeStore(){
+    var data = {};
+    var api = {
+      getItem: function(k){ return Object.prototype.hasOwnProperty.call(data, k) ? data[k] : null; },
+      setItem: function(k, v){ data[k] = String(v); },
+      removeItem: function(k){ delete data[k]; },
+      clear: function(){ data = {}; },
+      key: function(i){ return Object.keys(data)[i] || null; }
+    };
+    Object.defineProperty(api, 'length', { get: function(){ return Object.keys(data).length; } });
+    return api;
+  }
+  function tryShim(name){
+    var works = false;
+    try { works = !!window[name] && typeof window[name].getItem === 'function'; void window[name].length; }
+    catch (_) { works = false; }
+    if (works) return;
+    try { Object.defineProperty(window, name, { configurable: true, value: makeStore() }); }
+    catch (_) { try { window[name] = makeStore(); } catch (__) {} }
+  }
+  tryShim('localStorage');
+  tryShim('sessionStorage');
+})();</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app-wrap">
+<aside class="sidebar" role="navigation">
+  <div class="sidebar-brand" style="cursor:pointer;" onclick="switchScreen('manual')" title="Click to open Educator User Manual">
+    <div class="icon-educator icon-sm icon-hover icon-animate icon-shadow-md">
+      <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="36" height="36" rx="7" fill="url(#educatorGradSB)"/>
+        <path d="M18 13C18 13 13.2 11.5 9.5 13V25C13.2 23.5 18 25 18 25C18 25 22.8 23.5 26.5 25V13C22.8 11.5 18 13 18 13Z" fill="white" fill-opacity="0.15" stroke="white" stroke-width="1.1" stroke-linejoin="round"/>
+        <path d="M18 13.2V24.8" stroke="white" stroke-opacity="0.3" stroke-width="0.8"/>
+        <line x1="11.8" y1="16.8" x2="16.2" y2="15.7" stroke="white" stroke-width="0.7" stroke-opacity="0.45" stroke-linecap="round"/>
+        <line x1="11.8" y1="19.6" x2="16.2" y2="18.5" stroke="white" stroke-width="0.7" stroke-opacity="0.45" stroke-linecap="round"/>
+        <line x1="11.8" y1="22.4" x2="15.2" y2="21.5" stroke="white" stroke-width="0.7" stroke-opacity="0.45" stroke-linecap="round"/>
+        <circle cx="18" cy="8.5" r="1.5" fill="#FCD34D"/>
+        <circle cx="18" cy="8.5" r="4" fill="#FCD34D" fill-opacity="0.12"/>
+        <defs><linearGradient id="educatorGradSB" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse"><stop stop-color="#3b82f6"/><stop offset="1" stop-color="#1d4ed8"/></linearGradient></defs>
+      </svg>
+    </div>
+    <h1>Educator</h1>
+  </div>
+  <div class="sidebar-nav">
+    <button class="nav-item active" data-screen="chat">
+      <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span> Mentor Chat
+    </button>
+    <button class="nav-item" data-screen="dashboard">
+      <span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="4" rx="1"/><rect x="14" y="10" width="7" height="11" rx="1"/><rect x="3" y="13" width="7" height="8" rx="1"/></svg></span> Dashboard
+    </button>
+    <button class="nav-item" data-screen="path">
+      <span class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 21v-6m0-6V3m-9 9h6m6 0h6"/></svg></span> Career Path
+    </button>
+    <button class="nav-item" data-screen="learn">
+      <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></span> Learning Hub
+    </button>
+    <button class="nav-item" data-screen="profile">
+      <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span> Profile
+    </button>
+    <button class="nav-item" data-screen="manual">
+      <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-0.5-5.000000000000001Z"/><path d="M6 18h14"/></svg></span> User Manual
+    </button>
+    <button class="nav-item" style="color:#f59e0b;" onclick="openSaaSPlansModal()" title="View and Upgrade SaaS Subscription Tiers">
+      <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span> <span id="sidebarSaaSTier">Pro SaaS Plan</span>
+    </button>
+    <div class="spacer"></div>
+    <button class="nav-item logout-item" id="logout-trigger">
+      <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></span> Log Out
+    </button>
+  </div>
+</aside>
+<main class="main">
+<section class="screen active" id="screen-chat">
+  <div class="chat-wrap">
+    <div class="chat-header">
+      <div class="icon-educator icon-md icon-hover icon-loading icon-shadow-md" style="cursor:pointer;" onclick="switchScreen('manual')" title="Click to open Educator User Manual">
+        <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="36" height="36" rx="10" fill="url(#educatorGradCH)"/>
+          <path d="M18 13C18 13 13.2 11.5 9.5 13V25C13.2 23.5 18 25 18 25C18 25 22.8 23.5 26.5 25V13C22.8 11.5 18 13 18 13Z" fill="white" fill-opacity="0.15" stroke="white" stroke-width="1.1" stroke-linejoin="round"/>
+          <path d="M18 13.2V24.8" stroke="white" stroke-opacity="0.3" stroke-width="0.8"/>
+          <line x1="11.8" y1="16.8" x2="16.2" y2="15.7" stroke="white" stroke-width="0.7" stroke-opacity="0.45" stroke-linecap="round"/>
+          <line x1="11.8" y1="19.6" x2="16.2" y2="18.5" stroke="white" stroke-width="0.7" stroke-opacity="0.45" stroke-linecap="round"/>
+          <line x1="11.8" y1="22.4" x2="15.2" y2="21.5" stroke="white" stroke-width="0.7" stroke-opacity="0.45" stroke-linecap="round"/>
+          <circle cx="18" cy="8.5" r="1.5" fill="#FCD34D"/>
+          <circle cx="18" cy="8.5" r="4" fill="#FCD34D" fill-opacity="0.12"/>
+          <defs><linearGradient id="educatorGradCH" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse"><stop stop-color="#3b82f6"/><stop offset="1" stop-color="#1d4ed8"/></linearGradient></defs>
+        </svg>
+      </div>
+      <div style="flex:1;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div class="chat-h2" style="cursor:pointer;" onclick="switchScreen('manual')" title="Click to open Educator User Manual">Educator Mentor</div>
+          <span class="saas-badge pro" id="chatHeaderSaaSBadge" onclick="openSaaSPlansModal()" style="cursor:pointer;">PRO PLAN</span>
+          <span class="saas-badge" id="chatHeaderCacheBadge" style="display:none;background:rgba(16,185,129,0.12);color:#10b981;border-color:rgba(16,185,129,0.25);">⚡ 0ms Cached</span>
+        </div>
+        <div class="chat-status" id="chatAiEngineStatus">Online &middot; Auto-Routed (WORKSTATION)</div>
+      </div>
+    </div>
+    <div id="onDeviceAiBar" style="display:none !important;">
+      <span id="aiEngineDot"></span><strong id="aiEngineLabel"></strong><button id="btnToggleGemma"></button>
+    </div>
+    <div class="chat-msgs" id="chat-msgs"></div>
+    <div style="display:flex;gap:8px;overflow-x:auto;padding:10px 4px;flex-shrink:0;-webkit-overflow-scrolling:touch;scrollbar-width:none;" id="chatCategoryChips">
+      <button class="btn btn-sm btn-ghost" onclick="triggerCategoryGuidance('Doctor India')">&#128104;&#8205;&#9877;&#65039; Doctor (MBBS)</button>
+      <button class="btn btn-sm btn-ghost" onclick="triggerCategoryGuidance('Radiology Imaging')">&#9762; Radiology</button>
+      <button class="btn btn-sm btn-ghost" onclick="triggerCategoryGuidance('Pathology MLT')">&#128300; Pathology (MLT)</button>
+      <button class="btn btn-sm btn-ghost" onclick="triggerCategoryGuidance('Pharmacist B.Pharm')">&#128138; Pharmacist</button>
+      <button class="btn btn-sm btn-ghost" onclick="triggerCategoryGuidance('BCA Computer Science')">&#128187; BCA / B.Sc CS</button>
+      <button class="btn btn-sm btn-ghost" onclick="triggerCategoryGuidance('BBA Management')">&#128202; BBA / MBA</button>
+      <button class="btn btn-sm btn-ghost" onclick="triggerCategoryGuidance('Electrical Engineering')">&#9889; Electrical Eng</button>
+      <button class="btn btn-sm btn-ghost" onclick="triggerCategoryGuidance('Chemical Engineering')">&#129514; Chemical Eng</button>
+      <button class="btn btn-sm btn-ghost" onclick="triggerCategoryGuidance('BA LLB Law')">&#9878; BA LLB Law</button>
+      <button class="btn btn-sm btn-ghost" onclick="triggerCategoryGuidance('Space Science ISRO')">&#128640; Space Science</button>
+      <button class="btn btn-sm btn-ghost" onclick="triggerCategoryGuidance('Data Science')">&#129302; Data Science</button>
+      <button class="btn btn-sm btn-ghost" onclick="triggerCategoryGuidance('UPSC Civil Services')">&#127963; UPSC IAS</button>
+    </div>
+    <div class="chat-input">
+      <input type="text" id="chatInput" placeholder="Type your message...">
+      <button class="btn btn-primary" id="chatSend"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+    </div>
+  </div>
+</section>
+<section class="screen" id="screen-dashboard">
+  <div class="dash-greeting" id="dashGreeting">Good morning, Alex.</div>
+  <div class="dash-sub">Your career snapshot &middot; Updated today</div>
+  <div class="stat-grid">
+    <div class="glass-card">
+      <div class="stat-value" id="dashMarketVal">$78K</div>
+      <div class="stat-label">Estimated Market Value</div>
+      <div class="stat-body" id="dashMarketSub">+8% from last quarter &middot; Based on your skills and experience</div>
+    </div>
+    <div class="glass-card">
+      <div class="stat-value" id="dashMatchCount">5</div>
+      <div class="stat-label">Top Career Matches</div>
+      <div class="stat-body" id="dashMatchesList">
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:6px">
+          <li style="display:flex;justify-content:space-between;font-size:clamp(12px,.8rem,14px)"><span>Associate Product Manager</span><span style="font-weight:600;color:var(--accent)">94%</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="glass-card">
+      <div class="stat-value" id="dashMilestoneCount">3</div>
+      <div class="stat-label">Upcoming Milestones</div>
+      <div class="stat-body" id="dashMilestonesList">
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;gap:10px;align-items:flex-start"><div style="width:8px;height:8px;border-radius:50%;background:var(--accent);margin-top:5px;flex-shrink:0"></div><div><div style="font-weight:600;font-size:clamp(12px,.8rem,14px)">Complete PM certification</div><div class="small" style="margin-top:1px">15 days left</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="grid-aside">
+    <div class="glass-card">
+      <h3>Skill Gap Analysis</h3>
+      <p style="font-size:clamp(12px,.8rem,14px);color:var(--muted);margin-bottom:12px">Your strongest clusters vs. gaps in your target role.</p>
+      <div id="skillBars" style="display:flex;flex-direction:column;gap:12px"></div>
+    </div>
+    <div class="glass-card" id="dashNextStepCard">
+      <h3>Recommended Next Step</h3>
+      <p style="font-size:clamp(13px,.85rem,15px)" id="dashNextStepText">Enroll in <strong>Product Strategy &amp; Roadmapping</strong> to close the highest-impact gap for APM roles. Completing it could increase your market value by an estimated $6K&ndash;$9K.</p>
+      <button class="btn btn-primary" style="margin-top:12px" onclick="switchScreen('learn')">View Course</button>
+    </div>
+  </div>
+  <div style="display:flex;gap:clamp(8px,1vw,14px);flex-wrap:wrap">
+    <button class="btn" onclick="switchScreen('path')">View Career Path</button>
+    <button class="btn btn-primary" onclick="openReport()">Download PDF Report</button>
+    <button class="btn" onclick="exportRoadmapJSON()">Export JSON</button>
+    <button class="btn" onclick="shareRoadmapLink()">Share Roadmap</button>
+    <button class="btn btn-ghost" onclick="openSaaSPlansModal()" style="color:#f59e0b;">⭐ SaaS Plans</button>
+  </div>
+</section>
+<section class="screen" id="screen-path">
+  <h2>Your Career Path</h2>
+  <p style="color:var(--muted);margin-bottom:var(--gap)">A strategic map from where you are to where you want to be.</p>
+  <div class="mm-step-bar" id="stepBar">
+    <div class="mm-step-info">
+      <div class="mm-step-counter" id="stepCounter">Step 1 / 5</div>
+      <div class="mm-step-desc" id="stepDesc">Your starting point begins here</div>
+    </div>
+    <div class="mm-step-nav">
+      <button class="btn btn-sm btn-ghost" id="stepPrev"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+      <button class="btn btn-sm btn-ghost" id="stepNext"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+    </div>
+  </div>
+  <div class="mm-wrap">
+    <div class="mm-viewport" id="mmViewport">
+      <div class="mm-canvas" id="mmCanvas"><svg id="mmSvg" width="100%" height="100%" style="position:absolute;inset:0;pointer-events:none;overflow:visible;z-index:0"></svg></div>
+      <div class="mm-zoom">
+        <button id="zoomIn">+</button>
+        <button id="zoomOut">&minus;</button>
+        <button id="zoomReset">&#x21BA;</button>
+      </div>
+    </div>
+    <div class="path-sidebar">
+      <div class="glass-card">
+        <h3>Skill Gaps</h3>
+        <p class="small" style="margin-bottom:8px">Priority areas to reach your target</p>
+        <div id="pathGaps" style="display:flex;flex-direction:column;gap:8px"></div>
+      </div>
+      <div class="glass-card">
+        <h3>Market Value Projection</h3>
+        <div class="mv-display" id="pathMarketValDisplay">
+          <div class="mv-item"><div class="small">Current</div><div class="mv-value" id="pathMvCurrent">$78K</div></div>
+          <div class="mv-arrow">&rarr;</div>
+          <div class="mv-item"><div class="small">6-month</div><div class="mv-value mv-accent" id="pathMv6m">$92K</div></div>
+          <div class="mv-arrow">&rarr;</div>
+          <div class="mv-item"><div class="small">2-year</div><div class="mv-value" id="pathMv2y">$115K</div></div>
+        </div>
+      </div>
+      <div class="glass-card">
+        <h3>Strategic Analysis</h3>
+        <div id="pathAnalysisText">
+          <p style="font-size:clamp(12px,.8rem,14px)">Your technical foundation is strong. The highest-leverage move is building product strategy skills.</p>
+          <p style="font-size:clamp(12px,.8rem,14px);margin-top:8px">Timeline: 3 months cert + 1 month portfolio &rarr; begin applying.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="screen" id="screen-learn">
+  <h2>Learning &amp; Opportunities</h2>
+  <p style="color:var(--muted);margin-bottom:var(--gap)">Curated courses and jobs tailored to your career path.</p>
+  <div class="hub-tabs">
+    <button class="hub-tab active" data-panel="courses" onclick="switchHub('courses')">Courses</button>
+    <button class="hub-tab" data-panel="jobs" onclick="switchHub('jobs')">Job Openings</button>
+    <button class="hub-tab" data-panel="videos" onclick="switchHub('videos')">Career Videos</button>
+  </div>
+  <div class="hub-panel active" id="panel-courses">
+    <div class="grid-auto" id="panel-courses-grid"></div>
+  </div>
+  <div class="hub-panel" id="panel-jobs">
+    <div class="grid-auto" id="panel-jobs-grid"></div>
+  </div>
+  <div class="hub-panel" id="panel-videos">
+    <div class="grid-auto" id="panel-videos-grid"></div>
+  </div>
+</section>
+<section class="screen" id="screen-profile">
+  <div class="profile-header">
+    <div class="profile-av" id="profileAv">AK</div>
+    <div style="flex:1;min-width:0">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <div class="profile-name" id="profileName">Alex Kadir</div>
+        <button class="edit-btn" id="editProfileBtn"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+      </div>
+      <div class="profile-role" id="profileRole">Computer Science Graduate &middot; Aspiring Product Manager</div>
+      <p style="font-size:clamp(13px,.85rem,15px);color:var(--muted);margin-top:8px;line-height:1.6;" id="profileBio">Recent CS grad with internship experience in software engineering. Looking to transition into product management with a focus on technical products.</p>
+    </div>
+  </div>
+  <div class="profile-body" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:32px;">
+    <div>
+      <h3>Skills &amp; Competencies</h3>
+      <div class="skill-tags" id="profileSkills" style="margin-bottom:24px;"></div>
+      <h3>Enrolled Courses &amp; Roadmap</h3>
+      <div id="profileCourses" style="display:flex;flex-direction:column;gap:12px;margin-top:12px;"></div>
+    </div>
+    <div>
+      <h3>Experience</h3>
+      <div id="profileExp"></div>
+      <h3 style="margin-top:24px">Education</h3>
+      <div id="profileEdu"></div>
+    </div>
+  </div>
+  <div class="glass-card" style="margin-top:var(--gap)">
+    <div style="display:flex;gap:clamp(8px,1.5vw,14px);flex-wrap:wrap">
+      <button class="btn btn-primary" onclick="openReport()" style="flex:1;min-width:180px">Download Career Report</button>
+      <button class="btn" onclick="switchScreen('chat')" style="flex:1;min-width:140px">Chat with Mentor</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ USER MANUAL SCREEN ═══════════════════ -->
+<section class="screen" id="screen-manual" style="padding-bottom:60px;">
+  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;background:var(--surface);padding:clamp(12px,1.5vh,16px) clamp(68px,7vw,84px) clamp(12px,1.5vh,16px) clamp(14px,2vw,24px);border:1px solid var(--border);border-radius:14px;margin-bottom:20px;position:sticky;top:12px;z-index:50;box-shadow:0 8px 32px rgba(0,0,0,0.3)">
+    <div style="display:flex;align-items:center;gap:12px;min-width:0;flex:1;">
+      <button class="btn btn-primary" onclick="switchScreen('chat')" style="display:flex;align-items:center;gap:6px;padding:9px 16px;font-weight:600;font-size:13px;cursor:pointer;flex-shrink:0;border-radius:var(--radius-pill);box-shadow:0 4px 12px rgba(59,130,246,0.3);" title="Return to Chat Mentor">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        <span>Back to Chat</span>
+      </button>
+      <div class="icon-educator icon-md icon-hover icon-animate icon-shadow-lg" style="flex-shrink:0;">
+        <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="36" height="36" rx="10" fill="url(#educatorGradUM)"/>
+          <path d="M18 13C18 13 13.2 11.5 9.5 13V25C13.2 23.5 18 25 18 25C18 25 22.8 23.5 26.5 25V13C22.8 11.5 18 13 18 13Z" fill="white" fill-opacity="0.15" stroke="white" stroke-width="1.1" stroke-linejoin="round"/>
+          <path d="M18 13.2V24.8" stroke="white" stroke-opacity="0.3" stroke-width="0.8"/>
+          <line x1="11.8" y1="16.8" x2="16.2" y2="15.7" stroke="white" stroke-width="0.7" stroke-opacity="0.45" stroke-linecap="round"/>
+          <line x1="11.8" y1="19.6" x2="16.2" y2="18.5" stroke="white" stroke-width="0.7" stroke-opacity="0.45" stroke-linecap="round"/>
+          <line x1="11.8" y1="22.4" x2="15.2" y2="21.5" stroke="white" stroke-width="0.7" stroke-opacity="0.45" stroke-linecap="round"/>
+          <circle cx="18" cy="8.5" r="1.5" fill="#FCD34D"/>
+          <circle cx="18" cy="8.5" r="4" fill="#FCD34D" fill-opacity="0.12"/>
+          <defs><linearGradient id="educatorGradUM" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse"><stop stop-color="#3b82f6"/><stop offset="1" stop-color="#1d4ed8"/></linearGradient></defs>
+        </svg>
+      </div>
+      <div style="min-width:0;">
+        <h2 style="font-size:clamp(16px,2.5vw,22px);font-weight:700;margin:0;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Educator User Manual</h2>
+        <p style="font-size:clamp(11px,1.5vw,13px);color:var(--muted);margin:2px 0 0 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Use Cases, Local Privacy & Roadmap Guide</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Privacy & Local Security Guarantee -->
+  <div class="glass-card" style="margin-bottom:28px;border-left:4px solid #10b981;background:linear-gradient(135deg,rgba(16,185,129,0.08),transparent);">
+    <div style="display:flex;align-items:flex-start;gap:16px;">
+      <div style="font-size:28px;line-height:1">🛡️</div>
+      <div>
+        <h3 style="font-size:17px;font-weight:700;color:#10b981;margin:0 0 6px 0;">100% On-Device Privacy & Local Security Guarantee</h3>
+        <p style="font-size:14px;line-height:1.6;color:var(--text);margin:0 0 10px 0;">
+          Each and every piece of your information—including your custom profile details, enrolled courses, career assessment reports, and interactive AI chat transcripts—is stored <strong>permanently and securely inside your own local machine (`localStorage`)</strong>.
+        </p>
+        <div style="display:flex;flex-wrap:wrap;gap:16px;font-size:13px;color:var(--muted);">
+          <span style="display:flex;align-items:center;gap:6px;"><strong style="color:#10b981">✓ Zero Cloud Mining:</strong> No external tracking or data monetization.</span>
+          <span style="display:flex;align-items:center;gap:6px;"><strong style="color:#10b981">✓ Lifetime Persistence:</strong> Your data remains fixed on your device until you manually change it.</span>
+          <span style="display:flex;align-items:center;gap:6px;"><strong style="color:#10b981">✓ Offline Ready:</strong> Full roadmap synchronization without remote servers.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Profile Setup Guide for Maximum Accuracy -->
+  <div class="glass-card" style="margin-bottom:28px;">
+    <h3 style="font-size:18px;font-weight:700;color:var(--accent);margin:0 0 12px 0;">🎯 Profile Setup Guide: Generating 200% Accurate AI Recommendations</h3>
+    <p style="font-size:14px;line-height:1.6;color:var(--muted);margin:0 0 16px 0;">
+      To unlock the highest precision from the Educator AI Mentor across the Dashboard, Career Path, and Learning Hub, configure your profile accurately:
+    </p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;">
+      <div style="padding:16px;background:var(--surface);border-radius:10px;border:1px solid var(--border)">
+        <div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:6px;">1. Set Precise Role & Bio</div>
+        <p style="font-size:13px;color:var(--muted);margin:0;">Open <strong>Profile &rarr; Edit Profile</strong>. Enter your exact career objective (e.g., <em>BCA IT Specialist</em> or <em>Aspiring Medical Officer</em>). This locks your target salary brackets ($78K+ / ₹12L+).</p>
+      </div>
+      <div style="padding:16px;background:var(--surface);border-radius:10px;border:1px solid var(--border)">
+        <div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:6px;">2. Add Verified Competencies</div>
+        <p style="font-size:13px;color:var(--muted);margin:0;">Add your technical or medical skills (e.g., <em>React/Node</em>, <em>Radiology Imaging</em>, <em>Legal Reasoning</em>). The AI matches these directly against 95% match job postings.</p>
+      </div>
+      <div style="padding:16px;background:var(--surface);border-radius:10px;border:1px solid var(--border)">
+        <div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:6px;">3. Enrolled Courses & Sync</div>
+        <p style="font-size:13px;color:var(--muted);margin:0;">When saved, your customized data engages the <strong>Lifetime Profile Lock</strong>. Your exact details mirror across all tabs and official government portal gateways.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detailed Use Cases by User Stage Grid -->
+  <h3 style="font-size:19px;font-weight:700;color:var(--text);margin:0 0 16px 0;">📚 Step-by-Step Use Cases Across Career Stages</h3>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;margin-bottom:32px;">
+    
+    <!-- Use Case 1: After HS -->
+    <div class="glass-card" style="display:flex;flex-direction:column;gap:10px;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span style="font-size:24px;">🎓</span>
+        <div style="font-weight:700;font-size:16px;color:var(--accent);">Students After Higher Secondary (10+2 / HS)</div>
+      </div>
+      <p style="font-size:13px;line-height:1.6;color:var(--muted);margin:0;">
+        <strong>Goal:</strong> Choosing the right undergraduate stream and understanding entrance criteria.
+      </p>
+      <ul style="font-size:13px;line-height:1.6;color:var(--text);margin:0;padding-left:18px;">
+        <li>Ask AI Mentor about eligibility for <strong>NEET</strong>, <strong>JEE</strong>, <strong>AICTE</strong>, or Paramedical diplomas.</li>
+        <li>Click category chips below the chat to preview foundational 4-year roadmaps.</li>
+        <li>Use the Career Path tab to view starting salary expectations and initial semester steps.</li>
+      </ul>
+    </div>
+
+    <!-- Use Case 2: Undergraduate -->
+    <div class="glass-card" style="display:flex;flex-direction:column;gap:10px;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span style="font-size:24px;">🏛️</span>
+        <div style="font-weight:700;font-size:16px;color:var(--accent);">Undergraduate (UG) Students (BCA, B.Sc CS, BBA, MBBS)</div>
+      </div>
+      <p style="font-size:13px;line-height:1.6;color:var(--muted);margin:0;">
+        <strong>Goal:</strong> Bridging academic theory with live industry skill requirements.
+      </p>
+      <ul style="font-size:13px;line-height:1.6;color:var(--text);margin:0;padding-left:18px;">
+        <li>Access the <strong>Learning Hub</strong> to connect directly with <strong>UGC e-Syllabus</strong> and <strong>ISRO e-Learning</strong> portals.</li>
+        <li>Track milestone progression on the visual Career Path flow diagram.</li>
+        <li>Enroll in self-paced masterclasses to build specialized industry portfolios.</li>
+      </ul>
+    </div>
+
+    <!-- Use Case 3: Postgraduate -->
+    <div class="glass-card" style="display:flex;flex-direction:column;gap:10px;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span style="font-size:24px;">🔬</span>
+        <div style="font-weight:700;font-size:16px;color:var(--accent);">Postgraduate (PG) Students (MCA, M.Sc, MBA, LLM)</div>
+      </div>
+      <p style="font-size:13px;line-height:1.6;color:var(--muted);margin:0;">
+        <strong>Goal:</strong> Advanced specialization, thesis execution, and top-tier corporate placement.
+      </p>
+      <ul style="font-size:13px;line-height:1.6;color:var(--text);margin:0;padding-left:18px;">
+        <li>Utilize live backend synthesis to explore international research standards (<strong>O*NET Online</strong>).</li>
+        <li>Map advanced space and aerospace domains via verified <strong>SpaceCrew</strong> gateways.</li>
+        <li>Align senior competencies with executive leadership milestones.</li>
+      </ul>
+    </div>
+
+    <!-- Use Case 4: First Job -->
+    <div class="glass-card" style="display:flex;flex-direction:column;gap:10px;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span style="font-size:24px;">💼</span>
+        <div style="font-weight:700;font-size:16px;color:var(--accent);">Fresh Graduates Applying for First Job</div>
+      </div>
+      <p style="font-size:13px;line-height:1.6;color:var(--muted);margin:0;">
+        <strong>Goal:</strong> Securing high-paying entry roles ($75K+ / ₹12L+) and passing interviews.
+      </p>
+      <ul style="font-size:13px;line-height:1.6;color:var(--text);margin:0;padding-left:18px;">
+        <li>Check the <strong>Dashboard</strong> for real-time market value snapshots and top role matches (94%+ match).</li>
+        <li>Use the <strong>Live Jobs Board</strong> in the Learning Hub to apply directly to verified remote & global tech employers.</li>
+        <li>Click <strong>Download Career Report</strong> on the Profile tab to export a structured PDF dossier.</li>
+      </ul>
+    </div>
+
+    <!-- Use Case 5: Career Switch -->
+    <div class="glass-card" style="display:flex;flex-direction:column;gap:10px;grid-column:1/-1;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span style="font-size:24px;">🔄</span>
+        <div style="font-weight:700;font-size:16px;color:var(--accent);">Experienced Professionals & Career Switchers</div>
+      </div>
+      <p style="font-size:13px;line-height:1.6;color:var(--muted);margin:0;">
+        <strong>Goal:</strong> Pivoting into high-growth Tech, AI, or Healthcare domains without starting from zero.
+      </p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:4px;">
+        <div>
+          <div style="font-weight:600;font-size:13px;color:var(--text)">Transferable Skill Analysis</div>
+          <p style="font-size:13px;color:var(--muted);margin:2px 0 0 0;">Input existing competencies into the AI Mentor. The system immediately calculates overlap with modern IT, Data Science, or Management roles.</p>
+        </div>
+        <div>
+          <div style="font-weight:600;font-size:13px;color:var(--text)">Fast-Track Valuation Roadmap</div>
+          <p style="font-size:13px;color:var(--muted);margin:2px 0 0 0;">Follow the 6-month and 2-year valuation projection ($115K+ / ₹25L+) to target executive transitions and high-ROI skill certifications.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Production Ready Footer with Copyright Credit -->
+  <footer style="margin-top:48px;padding:28px 24px;border-top:1px solid var(--border);background:var(--surface);border-radius:14px;text-align:center;">
+    <div style="font-weight:700;font-size:16px;color:var(--text);letter-spacing:0.02em;margin-bottom:6px;">Educator</div>
+    <div style="font-size:14px;font-weight:600;color:var(--accent);margin-bottom:8px;">Copyright by Ranadeep Saha 2026 reserved.</div>
+    <p style="font-size:12px;color:var(--muted);max-width:600px;margin:0 auto;">
+      All rights reserved. Production Ready Architecture &bull; 200% Official Government & International Gateway Integration &bull; Permanent Local Privacy Engine
+    </p>
+  </footer>
+</section>
+</main>
+<nav class="mobile-nav" role="navigation">
+  <div class="mob-nav-inner">
+    <button class="mob-item active" data-screen="chat"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span><span class="nav-label">Chat</span></button>
+    <button class="mob-item" data-screen="dashboard"><span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="4" rx="1"/><rect x="14" y="10" width="7" height="11" rx="1"/><rect x="3" y="13" width="7" height="8" rx="1"/></svg></span><span class="nav-label">Dash</span></button>
+    <button class="mob-item" data-screen="path"><span class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 21v-6m0-6V3m-9 9h6m6 0h6"/></svg></span><span class="nav-label">Path</span></button>
+    <button class="mob-item" data-screen="learn"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></span><span class="nav-label">Learn</span></button>
+    <button class="mob-item" data-screen="profile"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span class="nav-label">Profile</span></button>
+    <button class="mob-item" data-screen="manual"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-0.5-5.000000000000001Z"/><path d="M6 18h14"/></svg></span><span class="nav-label">Guide</span></button>
+    <button class="mob-item" id="logout-trigger-mobile"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></span><span class="nav-label">Exit</span></button>
+  </div>
+</nav>
+<button class="menu-toggle" id="menuToggle" aria-label="Toggle menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<button class="theme-toggle" id="themeToggle">&#x25D0;</button>
+<div class="overlay" id="logoutOverlay">
+  <div class="modal" style="text-align:center">
+    <h2>Leave already?</h2>
+    <p>Your career data is saved. You can pick up where you left off anytime.</p>
+    <div class="modal-actions">
+      <button class="btn" id="cancelLogout">Stay</button>
+      <button class="btn btn-primary" id="confirmLogout">Log Out</button>
+    </div>
+  </div>
+</div>
+<div class="overlay" id="reportOverlay">
+  <div class="modal modal-lg">
+    <h2>Career Assessment Report</h2>
+    <p style="margin-bottom:12px">Preview your career report before downloading.</p>
+    <div id="reportPreview"><pre></pre></div>
+    <div class="modal-actions">
+      <button type="button" class="btn" id="closeReportBtn" onclick="window.handleCloseReport(event); return false;">Close</button>
+      <button type="button" class="btn btn-primary" id="copyReport" onclick="window.handleCopyReport(event); return false;">Copy</button>
+      <button type="button" class="btn btn-primary" id="downloadReport" onclick="window.handleDownloadReport(event); return false;">Download PDF / Save</button>
+    </div>
+  </div>
+</div>
+<div class="overlay" id="editOverlay">
+  <div class="modal modal-lg">
+    <h2>Edit Profile</h2>
+    <p style="margin-bottom:16px">Update your career information.</p>
+    <div class="edit-form" id="editForm"></div>
+    <div class="modal-actions" style="margin-top:16px">
+      <button class="btn" id="editCancel">Cancel</button>
+      <button class="btn btn-primary" id="editSave">Save Changes</button>
+    </div>
+  </div>
+</div>
+<div class="overlay" id="saasModalOverlay" style="display:none;">
+  <div class="modal modal-lg">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <h2>Educator AI &middot; SaaS Subscription Tiers</h2>
+      <button class="btn btn-sm btn-ghost" onclick="closeSaaSPlansModal()" style="font-size:18px;line-height:1;">&times;</button>
+    </div>
+    <p style="color:var(--muted);font-size:13px">Select your career intelligence tier. Stored safely in your local privacy sandbox.</p>
+    <div class="saas-pricing-grid">
+      <div class="saas-plan-card" id="planCardFree">
+        <div class="saas-badge">Starter</div>
+        <div class="price">Free <span>/ forever</span></div>
+        <ul>
+          <li>✓ 18 Official Gov Portals</li>
+          <li>✓ 50 AI Queries / 15 mins</li>
+          <li>✓ Client-Side Zero-State Privacy</li>
+          <li>✓ 24h Ultra-Low Latency Cache</li>
+        </ul>
+        <button class="btn btn-sm" onclick="selectSaaSPlan('starter')">Select Starter</button>
+      </div>
+      <div class="saas-plan-card active" id="planCardPro">
+        <div class="saas-badge pro">Most Popular</div>
+        <div class="price">$9 <span>/ month</span></div>
+        <ul>
+          <li>✓ Everything in Starter</li>
+          <li>✓ Multi-LLM Fallback Priority</li>
+          <li>✓ Unlimited PDF & JSON Exports</li>
+          <li>✓ Live Official Portal Health Checks</li>
+          <li>✓ Custom Curriculum Synthesis</li>
+        </ul>
+        <button class="btn btn-sm btn-primary" onclick="selectSaaSPlan('pro')">Active (Pro)</button>
+      </div>
+      <div class="saas-plan-card" id="planCardCampus">
+        <div class="saas-badge enterprise">Institutional</div>
+        <div class="price">$99 <span>/ month</span></div>
+        <ul>
+          <li>✓ Everything in Pro</li>
+          <li>✓ Campus-wide License</li>
+          <li>✓ UGC / AICTE Syllabus Mapping</li>
+          <li>✓ Dedicated Edge Instance SLA</li>
+          <li>✓ Priority Feature Requests</li>
+        </ul>
+        <button class="btn btn-sm" onclick="selectSaaSPlan('campus')">Select Campus</button>
+      </div>
+    </div>
+    <div class="modal-actions" style="margin-top:16px">
+      <button class="btn" onclick="closeSaaSPlansModal()">Close</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<script src="app.js"></script>
+
+</body>
+</html>

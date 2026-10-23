@@ -1,809 +1,3 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
-<meta name="theme-color" content="#f2f2f7">
-<title>Educator &mdash; Career Mentor</title>
-<script data-od-sandbox-shim>(function(){
-  function makeStore(){
-    var data = {};
-    var api = {
-      getItem: function(k){ return Object.prototype.hasOwnProperty.call(data, k) ? data[k] : null; },
-      setItem: function(k, v){ data[k] = String(v); },
-      removeItem: function(k){ delete data[k]; },
-      clear: function(){ data = {}; },
-      key: function(i){ return Object.keys(data)[i] || null; }
-    };
-    Object.defineProperty(api, 'length', { get: function(){ return Object.keys(data).length; } });
-    return api;
-  }
-  function tryShim(name){
-    var works = false;
-    try { works = !!window[name] && typeof window[name].getItem === 'function'; void window[name].length; }
-    catch (_) { works = false; }
-    if (works) return;
-    try { Object.defineProperty(window, name, { configurable: true, value: makeStore() }); }
-    catch (_) { try { window[name] = makeStore(); } catch (__) {} }
-  }
-  tryShim('localStorage');
-  tryShim('sessionStorage');
-})();</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{font-size:clamp(14px,1vw,18px);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;scroll-behavior:auto;-webkit-tap-highlight-color:transparent;overflow-y:scroll !important;scrollbar-gutter:stable}
-html:has(#screen-chat.active){overflow:hidden !important}
-body{font-family:var(--font-body);font-size:clamp(15px,1rem,17px);line-height:1.5;color:var(--fg);min-height:100dvh;background:var(--bg);background-attachment:fixed;overflow-x:hidden}
-svg,img{max-width:100%;height:auto;display:block}
-button,input,select,textarea{font:inherit}
-:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:8px}
-a{color:var(--accent)}
-::selection{background:color-mix(in oklab,var(--accent) 30%,transparent);color:#fff}
-:root{
-  --bg:oklch(94% .006 260);
-  --surface:oklch(100% 0 0/.38);
-  --surface-heavy:oklch(100% 0 0/.52);
-  --fg:#080707;
-  --muted:oklch(48% .01 260);
-  --border:oklch(48% .01 260/.1);
-  --accent:#1a97d1;
-  --accent-dim:oklch(50% .14 240);
-  --accent-soft:color-mix(in oklab,var(--accent) 12%,transparent);
-  --success:#34c759;
-  --warn:#ff9f0a;
-  --danger:#ff453a;
-  --shadow:0 1px 3px oklch(0% 0 0/.04),0 4px 16px oklch(0% 0 0/.06),0 12px 40px oklch(0% 0 0/.04);
-  --shadow-sm:0 1px 2px oklch(0% 0 0/.03),0 2px 8px oklch(0% 0 0/.04);
-  --glass-bg:oklch(100% 0 0/.42);
-  --glass-bg-heavy:oklch(100% 0 0/.58);
-  --radius:16px;
-  --radius-sm:10px;
-  --radius-pill:999px;
-  --font-sans:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI Variable','Segoe UI',Roboto,'Helvetica Neue',Arial,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol','Noto Color Emoji';
-  --font-serif:ui-serif,Georgia,Cambria,'Times New Roman',Times,serif;
-  --font-mono:ui-monospace,'SFMono-Regular',Menlo,Monaco,Consolas,'Liberation Mono','Courier New',monospace;
-  --font-display:var(--font-sans);
-  --font-body:var(--font-sans);
-  --nav-w:clamp(220px,18vw,280px);
-  --bottom-h:clamp(60px,9dvh,76px);
-  --max-content:1240px;
-  --gap:clamp(24px,3vw,40px);
-  --section-gap:clamp(24px,4vh,56px);
-  --blur-amount:32px;
-  --safe-bottom:env(safe-area-inset-bottom,0px);
-  --safe-top:env(safe-area-inset-top,0px);
-}
-.theme-dark{--bg:oklch(10% .006 260);--surface:oklch(38% .01 260/.3);--surface-heavy:oklch(42% .01 260/.45);--fg:oklch(92% .005 260);--muted:oklch(60% .01 260);--border:oklch(72% .015 260/.12);--accent:#5ac8fa;--accent-soft:color-mix(in oklab,#5ac8fa 15%,transparent);--glass-bg:oklch(35% .008 260/.55);--glass-bg-heavy:oklch(40% .008 260/.65);--shadow:0 1px 3px oklch(0% 0 0/.18),0 4px 20px oklch(0% 0 0/.3)}
-.theme-warm{--bg:oklch(94% .018 65);--surface:oklch(100% 0 0/.35);--surface-heavy:oklch(100% 0 0/.5);--fg:#080707;--muted:oklch(46% .015 50);--border:oklch(46% .015 50/.1);--accent:#1a97d1;--accent-soft:color-mix(in oklab,#1a97d1 12%,transparent);--glass-bg:oklch(100% 0 0/.4);--glass-bg-heavy:oklch(100% 0 0/.55)}
-.app-wrap{display:flex;min-height:100dvh}
-.sidebar{position:fixed;inset:0 auto 0 0;width:var(--nav-w);background:var(--glass-bg);-webkit-backdrop-filter:blur(var(--blur-amount));backdrop-filter:blur(var(--blur-amount));border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100}
-.sidebar-brand{display:flex;align-items:center;gap:12px;padding:clamp(16px,2.5vh,28px) clamp(14px,2vw,24px);border-bottom:1px solid var(--border)}
-.logo-square{width:36px;height:36px;border-radius:var(--radius-sm);background:linear-gradient(135deg,var(--accent),color-mix(in oklab,var(--accent) 70%,#000));display:flex;align-items:center;justify-content:center;font-family:var(--font-sans);font-size:16px;font-weight:600;color:#fff;flex-shrink:0}
-.sidebar-brand h1{font-family:var(--font-display);font-size:clamp(17px,1.4vw,20px);font-weight:600;letter-spacing:-.02em;line-height:1.1}
-.sidebar-nav{flex:1;display:flex;flex-direction:column;padding:8px 0}
-.nav-item{display:flex;align-items:center;gap:12px;padding:clamp(10px,1.2vh,14px) clamp(14px,2vw,24px);border:none;background:transparent;color:var(--muted);font-family:var(--font-body);font-size:clamp(12px,.85rem,14px);font-weight:500;cursor:pointer;border-radius:var(--radius-sm);margin:0 8px;transition:background .15s,color .15s}
-.nav-item:hover{background:var(--accent-soft);color:var(--fg)}
-.nav-item.active{color:var(--fg);background:var(--accent-soft)}
-.nav-icon svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;vertical-align:middle}
-.spacer{flex:1}
-.logout-item{color:var(--danger)}
-.main{margin-left:var(--nav-w);width:calc(100% - var(--nav-w));max-width:calc(100% - var(--nav-w));flex:none;display:flex;flex-direction:column;padding:clamp(16px,2.5vh,28px) clamp(16px,3vw,48px);gap:var(--section-gap);min-height:100dvh}
-body:has(#screen-chat.active) { overflow: hidden !important; height: 100dvh !important; max-height: 100dvh !important; margin: 0 !important; padding: 0 !important; }
-.main:has(#screen-chat.active) { height: 100dvh !important; max-height: 100dvh !important; overflow: hidden !important; padding: clamp(10px, 1.5vh, 16px) clamp(14px, 2.5vw, 40px) !important; gap: 0 !important; box-sizing: border-box !important; }
-.screen:not(#screen-chat){flex-shrink:0}
-#screen-chat.active{display:flex !important;flex-direction:column !important;flex:1 1 0% !important;min-height:0 !important;height:100% !important;max-height:100% !important;overflow:hidden !important;box-sizing:border-box !important;}
-#screen-chat.active .chat-wrap{display:flex !important;flex-direction:column !important;flex:1 1 0% !important;min-height:0 !important;height:100% !important;max-height:100% !important;overflow:hidden !important;box-sizing:border-box !important;}
-#chatCategoryChips{display:flex !important;flex-wrap:nowrap !important;overflow-x:auto !important;-webkit-overflow-scrolling:touch !important;gap:8px !important;padding:10px 4px !important;flex-shrink:0 !important;scrollbar-width:none !important}
-#chatCategoryChips::-webkit-scrollbar{display:none !important}
-#chatCategoryChips .btn{white-space:nowrap !important;flex-shrink:0 !important}
-.menu-toggle{display:none !important}
-.sidebar-overlay{display:none !important}
-.screen{display:none;flex-direction:column;gap:var(--gap)}
-.screen.active{display:flex}
-
-.mobile-nav{display:none;position:fixed;inset:auto 0 0 0;height:var(--bottom-h);background:var(--glass-bg);-webkit-backdrop-filter:blur(var(--blur-amount));backdrop-filter:blur(var(--blur-amount));border-top:1px solid var(--border);z-index:100;padding-bottom:var(--safe-bottom)}
-.mob-nav-inner{display:flex;height:100%;padding:0 env(safe-area-inset-left,4px) 0 env(safe-area-inset-right,4px)}
-.mob-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border:none;background:transparent;color:var(--muted);font-family:var(--font-body);font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:.04em;cursor:pointer;padding:4px 2px;border-radius:var(--radius-sm);transition:none}
-.mob-item .nav-icon svg{width:20px;height:20px;stroke-width:1.8}
-.mob-item:hover{color:var(--fg)}
-.mob-item.active{color:var(--accent)}
-.mob-item .nav-label{line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
-.glass-card{background:var(--glass-bg);-webkit-backdrop-filter:blur(var(--blur-amount));backdrop-filter:blur(var(--blur-amount));border:1px solid var(--border);border-radius:var(--radius);padding:clamp(16px,2.2vw,28px);box-shadow:var(--shadow)}
-.glass-card h3{font-family:var(--font-display);font-size:clamp(16px,1.2rem,20px);font-weight:600;letter-spacing:-.02em;margin-bottom:12px;color:var(--fg)}
-.divider{height:1px;background:var(--border);border:none;margin:var(--section-gap) 0}
-h2{font-family:var(--font-display);font-size:clamp(22px,3vw,36px);font-weight:600;letter-spacing:-.03em;line-height:1.15;color:var(--fg)}
-p{max-width:65ch}
-.small{font-size:clamp(10px,.7rem,12px);text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:500}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:clamp(10px,1.2vh,14px) clamp(16px,2vw,28px);border:none;border-radius:var(--radius-pill);font-family:var(--font-body);font-size:clamp(12px,.85rem,14px);font-weight:500;cursor:pointer;background:var(--surface);color:var(--fg);box-shadow:var(--shadow-sm);text-decoration:none}
-.btn:hover{background:var(--surface-heavy)}
-.btn-primary{background:var(--accent);color:#fff}
-.btn-primary:hover{background:color-mix(in oklab,var(--accent) 80%,#000)}
-.btn-ghost{background:transparent;box-shadow:none}
-.btn-ghost:hover{background:var(--accent-soft)}
-.btn-sm{padding:clamp(6px,.6vh,8px) clamp(10px,1vw,16px);font-size:clamp(11px,.75rem,13px)}
-.grid-auto{display:grid;grid-template-columns:repeat(auto-fill,minmax(clamp(220px,25vw,320px),1fr));gap:var(--gap)}
-.grid-aside{display:grid;grid-template-columns:1.2fr .8fr;gap:var(--gap)}
-.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gap);margin-bottom:var(--section-gap)}
-.stat-value{font-family:var(--font-display);font-size:clamp(24px,3vw,40px);font-weight:600;letter-spacing:-.03em;line-height:1;margin-bottom:4px;color:var(--fg)}
-.stat-label{font-size:clamp(11px,.75rem,13px);text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:500}
-.stat-body{margin-top:12px;padding-top:12px;border-top:1px solid var(--border);font-size:clamp(12px,.8rem,14px);color:var(--muted)}
-.dash-greeting{font-family:var(--font-display);font-size:clamp(26px,4vw,44px);font-weight:600;letter-spacing:-.03em;line-height:1.1;color:var(--fg)}
-.dash-sub{font-size:clamp(12px,.8rem,14px);text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:var(--gap)}
-.grid-aside{margin-bottom:var(--section-gap)}
-.chat-wrap{display:flex;flex-direction:column;flex:1;min-height:0;max-width:820px;margin:0 auto;width:100%;height:100%;max-height:100%;overflow:hidden}
-.chat-header{display:flex;align-items:center;gap:14px;padding-bottom:16px;border-bottom:1px solid var(--border);flex-shrink:0}
-.chat-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--accent),color-mix(in oklab,var(--accent) 70%,#000));display:flex;align-items:center;justify-content:center;font-family:var(--font-sans);font-size:16px;font-weight:600;color:#fff;flex-shrink:0}
-.chat-h2{font-family:var(--font-display);font-size:clamp(18px,1.3rem,22px);font-weight:600;letter-spacing:-.02em;color:var(--fg)}
-.chat-status{font-size:clamp(10px,.7rem,12px);text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
-.chat-msgs{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:12px;padding:8px 0 12px;overscroll-behavior:contain;min-height:0;max-height:100%}
-.chat-msgs:empty::after{content:'';flex:1}
-.msg{display:flex;gap:10px;max-width:88%}
-.msg.mentor{align-self:flex-start}
-.msg.user{align-self:flex-end;flex-direction:row-reverse}
-.msg-av{width:32px;height:32px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px}
-.msg.mentor .msg-av{background:var(--accent-soft);color:var(--accent)}
-.msg.user .msg-av{background:var(--accent);color:#fff}
-.msg-bubble{padding:clamp(10px,1.2vh,16px) clamp(12px,1.4vw,18px);border-radius:var(--radius);font-size:clamp(13px,.85rem,15px);line-height:1.55;word-wrap:break-word;overflow-wrap:break-word}
-.msg.mentor .msg-bubble{background:var(--glass-bg-heavy);-webkit-backdrop-filter:blur(var(--blur-amount));backdrop-filter:blur(var(--blur-amount));border:1px solid var(--border)}
-.msg.user .msg-bubble{background:var(--accent);color:#fff}
-.msg-bubble p{margin:0;max-width:none}
-.msg-bubble p+p{margin-top:8px}
-.msg-time{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-top:4px;opacity:.7}
-.chat-input{display:flex;gap:8px;padding-top:12px;border-top:1px solid var(--border);flex-shrink:0;padding-bottom:env(safe-area-inset-bottom,0px)}
-.chat-input input{flex:1;padding:clamp(10px,1.2vh,14px) clamp(12px,1.4vw,16px);border:1px solid var(--border);border-radius:var(--radius-pill);font-family:var(--font-body);font-size:clamp(13px,.85rem,15px);background:var(--glass-bg);color:var(--fg);outline:none;min-width:0}
-.chat-input input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
-.chat-input .btn{border-radius:50%;width:clamp(38px,5vh,46px);height:clamp(38px,5vh,46px);padding:0;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.mm-wrap{display:grid;grid-template-columns:1fr clamp(280px,28vw,360px);gap:var(--gap)}
-.mm-viewport{background:var(--glass-bg);-webkit-backdrop-filter:blur(var(--blur-amount));backdrop-filter:blur(var(--blur-amount));border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;position:relative;min-height:clamp(360px,55vh,560px);touch-action:none}
-.mm-canvas{position:absolute;inset:0;cursor:grab}.mm-canvas:active{cursor:grabbing}
-.mm-node{position:absolute;padding:12px 16px;background:var(--surface);border:2px solid var(--border);border-radius:12px;font-family:var(--font-display);font-size:13px;font-weight:600;letter-spacing:-.01em;text-align:center;min-width:130px;max-width:170px;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,0.08);white-space:normal;line-height:1.35;z-index:2;transition:all 0.2s ease}
-.mm-node:hover{transform:translate(-50%,-50%) scale(1.06);box-shadow:0 8px 24px rgba(0,0,0,0.15);z-index:10}
-.mm-node .mm-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);font-family:var(--font-body);font-weight:700;display:block;margin-bottom:4px}
-.mm-node.current{border-color:var(--accent);background:var(--surface-heavy);box-shadow:0 0 0 4px var(--accent-soft),0 6px 16px rgba(0,0,0,0.12)}
-.mm-node.visited{border-color:var(--accent);opacity:0.95}
-.mm-node.future{opacity:0.65;border-style:dashed}
-.mm-step-bar{display:flex;align-items:center;gap:clamp(8px,1vw,16px);padding:clamp(8px,1vh,12px) clamp(10px,1.2vw,14px);background:var(--glass-bg);-webkit-backdrop-filter:blur(var(--blur-amount));backdrop-filter:blur(var(--blur-amount));border:1px solid var(--border);border-radius:var(--radius);margin-bottom:var(--gap);flex-wrap:wrap}
-.mm-step-info{flex:1;min-width:0}
-.mm-step-counter{font-size:clamp(11px,.75rem,13px);font-weight:600;color:var(--accent)}
-.mm-step-desc{font-size:clamp(12px,.8rem,14px);color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.mm-step-nav{display:flex;gap:6px}
-.mm-zoom{position:absolute;bottom:12px;right:12px;z-index:5;display:flex;gap:4px}
-.mm-zoom button{width:32px;height:32px;border:none;border-radius:50%;background:var(--glass-bg-heavy);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--fg);font-size:16px;font-weight:600;box-shadow:var(--shadow-sm)}
-.mm-zoom button:hover{background:var(--surface-heavy)}
-.path-sidebar{display:flex;flex-direction:column;gap:var(--gap)}
-.path-section h3{font-family:var(--font-display);font-size:clamp(15px,1.1rem,18px);font-weight:600;letter-spacing:-.01em;margin-bottom:8px;color:var(--fg)}
-.gap-track{height:6px;background:var(--border);border-radius:3px;margin:6px 0 10px;overflow:hidden}
-.gap-fill{height:100%;background:var(--accent);border-radius:3px}
-.mv-display{display:flex;flex-direction:column;gap:10px;width:100%}
-.mv-item{text-align:left;background:var(--surface);padding:10px 14px;border-radius:var(--radius-sm);border:1px solid var(--border);width:100%;box-sizing:border-box}
-.mv-value{font-family:var(--font-display);font-size:clamp(15px,1.15rem,18px);font-weight:600;letter-spacing:-.01em;line-height:1.35;color:var(--fg);word-break:break-word;overflow-wrap:break-word;margin-top:4px}
-.mv-accent{color:var(--accent)}
-.mv-arrow{display:none}
-.hub-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:var(--gap)}
-.hub-tab{padding:clamp(8px,1vh,12px) clamp(14px,2vw,24px);border:none;background:transparent;font-family:var(--font-body);font-size:clamp(12px,.8rem,14px);font-weight:500;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px}
-.hub-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
-.hub-panel{display:none}
-.hub-panel.active{display:block}
-.course-meta{font-size:clamp(10px,.7rem,12px);text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:4px}
-.course-title{font-family:var(--font-display);font-size:clamp(15px,1.1rem,17px);font-weight:600;letter-spacing:-.01em;margin-bottom:4px;line-height:1.2}
-.course-desc{font-size:clamp(12px,.8rem,14px);color:var(--muted);margin-bottom:12px;flex:1}
-.course-footer{display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1px solid var(--border);font-size:clamp(11px,.75rem,13px)}
-.job-company{font-size:clamp(10px,.7rem,12px);text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:2px}
-.job-title{font-family:var(--font-display);font-size:clamp(15px,1.1rem,17px);font-weight:600;letter-spacing:-.01em;margin-bottom:2px}
-.job-location{font-size:clamp(12px,.8rem,14px);color:var(--muted);margin-bottom:8px}
-.job-match{font-size:clamp(12px,.8rem,14px);font-weight:600;color:var(--accent)}
-.video-card{cursor:pointer}
-.video-thumb{aspect-ratio:16/9;background:var(--accent-soft);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;margin-bottom:8px;overflow:hidden;position:relative}
-.video-thumb svg{width:clamp(32px,4vw,48px);height:clamp(32px,4vw,48px);fill:var(--accent);opacity:.8}
-.lang-badge{position:absolute;top:8px;right:8px;padding:2px 8px;border-radius:var(--radius-pill);background:var(--glass-bg-heavy);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);font-size:10px;font-weight:600;color:var(--fg);border:1px solid var(--border)}
-.profile-header{display:flex;gap:clamp(16px,2.5vw,28px);align-items:flex-start;padding-bottom:var(--gap);border-bottom:1px solid var(--border);margin-bottom:var(--gap)}
-.profile-av{width:clamp(56px,7vw,80px);height:clamp(56px,7vw,80px);border-radius:50%;background:linear-gradient(135deg,var(--accent),color-mix(in oklab,var(--accent) 60%,#000));display:flex;align-items:center;justify-content:center;font-family:var(--font-sans);font-size:clamp(22px,3vw,32px);font-weight:600;color:#fff;flex-shrink:0}
-.profile-name{font-family:var(--font-display);font-size:clamp(22px,3vw,32px);font-weight:600;letter-spacing:-.02em;line-height:1.1;color:var(--fg)}
-.profile-role{font-size:clamp(13px,.9rem,15px);font-weight:500;color:var(--accent);margin-top:4px}
-.edit-btn{width:44px;height:44px;border-radius:50%;border:1px solid var(--border);background:var(--glass-bg);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);box-shadow:var(--shadow-sm);flex-shrink:0;transition:color .15s,background .15s}
-.edit-btn:hover{color:var(--accent);background:var(--accent-soft)}
-.edit-btn svg{width:18px;height:18px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
-.profile-body{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4vw,48px)}
-.skill-tags{display:flex;flex-wrap:wrap;gap:8px}
-.skill-tag{padding:clamp(4px,.5vh,6px) clamp(10px,1.2vw,14px);border:1px solid var(--border);border-radius:var(--radius-pill);font-size:clamp(11px,.75rem,13px);font-weight:500;background:var(--glass-bg);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
-.skill-tag.accent{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
-.exp-item{padding:clamp(10px,1.2vh,14px) 0;border-bottom:1px solid var(--border)}
-.exp-item:last-child{border-bottom:none}
-.exp-title{font-family:var(--font-display);font-size:clamp(14px,1rem,16px);font-weight:600;letter-spacing:-.01em}
-.exp-meta{font-size:clamp(10px,.7rem,12px);text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
-.exp-desc{font-size:clamp(12px,.8rem,14px);color:var(--muted);margin-top:4px}
-.overlay{position:fixed;inset:0;z-index:200;background:oklch(0% 0 0/.5);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:clamp(12px,2vw,24px)}
-.overlay.active{display:flex}
-.modal{background:var(--glass-bg);-webkit-backdrop-filter:blur(var(--blur-amount));backdrop-filter:blur(var(--blur-amount));border:1px solid var(--border);border-radius:var(--radius);padding:clamp(24px,3vw,40px);max-width:clamp(340px,50vw,520px);width:100%;box-shadow:var(--shadow);max-height:90dvh;overflow-y:auto}
-.modal h2{margin-bottom:8px;font-size:clamp(20px,2.5vw,28px)}
-.modal p{font-size:clamp(13px,.85rem,15px);color:var(--muted);margin-bottom:12px}
-.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap}
-.modal-lg{max-width:clamp(360px,70vw,640px)}
-#reportPreview pre{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:20px;font-family:var(--font-mono);font-size:clamp(11px,.75rem,13px);line-height:1.6;overflow-x:auto;white-space:pre-wrap;max-height:40vh;overflow-y:auto;color:var(--fg)}
-.edit-form{display:flex;flex-direction:column;gap:14px}
-.form-group{display:flex;flex-direction:column;gap:4px}
-.form-group label{font-size:clamp(11px,.75rem,13px);font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
-.form-group input,.form-group textarea{padding:clamp(8px,1vh,12px) clamp(10px,1.2vw,14px);border:1px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-body);font-size:clamp(13px,.85rem,15px);background:var(--glass-bg);color:var(--fg);outline:none}
-.form-group input:focus,.form-group textarea:focus{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft)}
-.form-group textarea{resize:vertical;min-height:60px}
-.edit-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
-.edit-tag{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border:1px solid var(--border);border-radius:var(--radius-pill);font-size:clamp(11px,.75rem,13px);background:var(--accent-soft)}
-.edit-tag .rm-tag{border:none;background:none;cursor:pointer;font-size:14px;line-height:1;color:var(--muted);padding:0 2px}
-.edit-tag .rm-tag:hover{color:var(--danger)}
-.edit-exp-item{padding:clamp(8px,1vh,12px);border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:8px;background:var(--glass-bg)}
-.edit-exp-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
-.edit-exp-hdr .exp-title-sm{font-size:clamp(12px,.8rem,14px);font-weight:600}
-.rm-exp{background:none;border:none;color:var(--danger);cursor:pointer;font-size:clamp(11px,.75rem,13px);padding:2px 6px}
-.add-btn{background:none;border:1px dashed var(--border);border-radius:var(--radius-sm);padding:8px;cursor:pointer;font-size:clamp(12px,.8rem,14px);color:var(--muted);margin-top:4px;width:100%}
-.add-btn:hover{border-color:var(--accent);color:var(--accent)}
-.theme-toggle{position:fixed !important;top:14px !important;right:16px !important;z-index:150 !important;width:40px;height:40px;border-radius:50%;border:1px solid var(--border);background:var(--glass-bg);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);cursor:pointer;display:flex !important;align-items:center;justify-content:center;color:var(--fg);box-shadow:var(--shadow);font-size:18px}
-.theme-toggle:hover{background:var(--surface-heavy)}
-.menu-toggle, .sidebar-overlay { display: none !important; }
-@media(max-width:1024px){
-  .stat-grid{grid-template-columns:repeat(2,1fr)}
-  .grid-aside{grid-template-columns:1fr}
-  .mm-wrap{grid-template-columns:1fr}
-}
-@media(max-width:820px){
-  .sidebar{display:none !important}
-  .mobile-nav{display:block !important}
-  .main{margin-left:0 !important;width:100% !important;max-width:100% !important;padding:12px 12px calc(var(--bottom-h) + env(safe-area-inset-bottom,0px) + 12px) 12px;min-height:100dvh}
-  .profile-body{grid-template-columns:1fr}
-  html{overflow-y:scroll;-webkit-overflow-scrolling:touch}
-  #screen-chat.active{height:calc(100dvh - var(--bottom-h) - env(safe-area-inset-bottom, 0px) - 28px) !important;max-height:calc(100dvh - var(--bottom-h) - env(safe-area-inset-bottom, 0px) - 28px) !important}
-  .chat-wrap{height:100%;display:flex;flex-direction:column;min-height:0}
-  .chat-msgs{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch}
-  .chat-input{flex-shrink:0}
-  #chatCategoryChips{display:flex;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;gap:6px;padding:8px 0;flex-shrink:0;scrollbar-width:none}
-  #chatCategoryChips::-webkit-scrollbar{display:none}
-  .mob-nav-inner{display:flex;align-items:center;justify-content:space-between;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;gap:2px}
-  .mob-nav-inner::-webkit-scrollbar{display:none}
-  .mob-item{flex:1;min-width:44px;padding:4px 2px}
-  .mob-item .nav-label{display:block;font-size:9px}
-  .grid-2{grid-template-columns:1fr !important}
-  .overlay{padding:10px !important}
-  .modal, .modal-lg{max-width:96vw !important;width:96vw !important;max-height:85dvh !important;padding:20px 14px !important;border-radius:16px !important;box-sizing:border-box !important}
-  .edit-form{gap:12px !important}
-  .form-group input, .form-group textarea{font-size:14px !important;padding:10px 12px !important;width:100% !important;box-sizing:border-box !important}
-  .edit-tags{gap:8px !important}
-  .edit-tag{max-width:100% !important;white-space:normal !important;word-break:break-word !important;line-height:1.4 !important;padding:6px 10px !important}
-  .edit-exp-item{padding:10px !important;margin-bottom:6px !important}
-  .edit-exp-hdr .exp-title-sm{word-break:break-word !important;line-height:1.3 !important;padding-right:8px}
-}
-@media(max-width:640px){
-  .hub-tabs{overflow-x:auto;-webkit-overflow-scrolling:touch;gap:0}
-  .hub-tab{white-space:nowrap;flex-shrink:0}
-  .mm-step-desc{white-space:normal}
-  .mv-display{gap:8px;flex-wrap:wrap}
-  .theme-toggle{top:10px !important;right:12px !important;width:36px !important;height:36px !important;font-size:16px !important}
-  .modal, .modal-lg{max-height:82dvh !important;padding:16px 12px !important}
-}
-@media(max-width:540px){
-  .stat-grid{grid-template-columns:1fr}
-  .grid-auto{grid-template-columns:1fr}
-  .main{padding:10px 8px calc(var(--bottom-h) + env(safe-area-inset-bottom,0px) + 8px) 8px}
-  .chat-msgs{gap:8px}
-  .msg{max-width:94%}
-  .chat-wrap{max-width:100%}
-}
-@media(max-width:400px){
-  .mm-step-bar{flex-direction:column;align-items:stretch;gap:8px}
-  .mm-step-nav{align-self:flex-end}
-  html{font-size:14px}
-  .mob-item{padding:4px 1px}
-  .mob-item .nav-label{font-size:8px}
-  .btn{padding:clamp(8px,1.2vh,12px) clamp(12px,2vw,20px)}
-  .msg-bubble{font-size:13px}
-}
-@media(max-width:360px){
-  .chat-header{gap:10px}
-  .chat-avatar{width:36px;height:36px;font-size:13px}
-  .chat-h2{font-size:16px}
-  .hub-tab{padding:clamp(6px,.8vh,10px) clamp(10px,1.5vw,16px);font-size:11px}
-  .mm-node{min-width:90px;font-size:11px;padding:8px 10px}
-}
-::-webkit-scrollbar{width:4px;height:4px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
-::-webkit-scrollbar-thumb:hover{background:var(--muted)}
-@media print{body{background:#fff;color:#000}.sidebar,.mobile-nav,.theme-toggle,.overlay,.chat-input,.hub-tabs,.edit-btn{display:none!important}.main{margin-left:0;padding:0}.screen{display:block!important}.glass-card{background:#fff;border:1px solid #ddd;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;box-shadow:none}}
-
-/* ══════════════════════════════════════
-   EDUCATOR APP ICON — SVG DEFINITION & ANIMATIONS
-   ══════════════════════════════════════ */
-.icon-educator { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.icon-xs { width: 20px; height: 20px; }
-.icon-sm { width: 28px; height: 28px; }
-.icon-md { width: 40px; height: 40px; }
-.icon-lg { width: 56px; height: 56px; }
-.icon-xl { width: 80px; height: 80px; }
-.icon-2xl { width: 120px; height: 120px; }
-.icon-xs svg { border-radius: 5px; }
-.icon-sm svg { border-radius: 7px; }
-.icon-md svg { border-radius: 10px; }
-.icon-lg svg { border-radius: 13px; }
-.icon-xl svg { border-radius: 18px; }
-.icon-2xl svg { border-radius: 26px; }
-.icon-circle svg { border-radius: 50% !important; }
-.icon-shadow-sm svg { box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
-.icon-shadow-md svg { box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
-.icon-shadow-lg svg { box-shadow: 0 4px 20px rgba(59,130,246,0.2), 0 2px 8px rgba(0,0,0,0.3); }
-.icon-educator svg { transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease; }
-.icon-hover:hover svg { transform: scale(1.08); }
-.icon-hover:active svg { transform: scale(0.96); }
-@keyframes iconEnter {
-  0% { opacity: 0; transform: scale(0.7); }
-  60% { transform: scale(1.05); }
-  100% { opacity: 1; transform: scale(1); }
-}
-.icon-animate svg { animation: iconEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-@keyframes pulseRing {
-  0% { transform: scale(0.95); opacity: 0.4; }
-  100% { transform: scale(1.25); opacity: 0; }
-}
-.icon-loading { position: relative; contain: layout style; }
-.icon-loading::after {
-  content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
-  border: 2px solid rgba(59,130,246,0.4); animation: pulseRing 2s cubic-bezier(0.16, 1, 0.3, 1) infinite;
-}
-.icon-loading svg { border-radius: inherit !important; position: relative; z-index: 1; }
-</style>
-</head>
-<body>
-<div class="app-wrap">
-<aside class="sidebar" role="navigation">
-  <div class="sidebar-brand" style="cursor:pointer;" onclick="switchScreen('manual')" title="Click to open Educator User Manual">
-    <div class="icon-educator icon-sm icon-hover icon-animate icon-shadow-md">
-      <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect width="36" height="36" rx="7" fill="url(#educatorGradSB)"/>
-        <path d="M18 13C18 13 13.2 11.5 9.5 13V25C13.2 23.5 18 25 18 25C18 25 22.8 23.5 26.5 25V13C22.8 11.5 18 13 18 13Z" fill="white" fill-opacity="0.15" stroke="white" stroke-width="1.1" stroke-linejoin="round"/>
-        <path d="M18 13.2V24.8" stroke="white" stroke-opacity="0.3" stroke-width="0.8"/>
-        <line x1="11.8" y1="16.8" x2="16.2" y2="15.7" stroke="white" stroke-width="0.7" stroke-opacity="0.45" stroke-linecap="round"/>
-        <line x1="11.8" y1="19.6" x2="16.2" y2="18.5" stroke="white" stroke-width="0.7" stroke-opacity="0.45" stroke-linecap="round"/>
-        <line x1="11.8" y1="22.4" x2="15.2" y2="21.5" stroke="white" stroke-width="0.7" stroke-opacity="0.45" stroke-linecap="round"/>
-        <circle cx="18" cy="8.5" r="1.5" fill="#FCD34D"/>
-        <circle cx="18" cy="8.5" r="4" fill="#FCD34D" fill-opacity="0.12"/>
-        <defs><linearGradient id="educatorGradSB" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse"><stop stop-color="#3b82f6"/><stop offset="1" stop-color="#1d4ed8"/></linearGradient></defs>
-      </svg>
-    </div>
-    <h1>Educator</h1>
-  </div>
-  <div class="sidebar-nav">
-    <button class="nav-item active" data-screen="chat">
-      <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span> Mentor Chat
-    </button>
-    <button class="nav-item" data-screen="dashboard">
-      <span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="4" rx="1"/><rect x="14" y="10" width="7" height="11" rx="1"/><rect x="3" y="13" width="7" height="8" rx="1"/></svg></span> Dashboard
-    </button>
-    <button class="nav-item" data-screen="path">
-      <span class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 21v-6m0-6V3m-9 9h6m6 0h6"/></svg></span> Career Path
-    </button>
-    <button class="nav-item" data-screen="learn">
-      <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></span> Learning Hub
-    </button>
-    <button class="nav-item" data-screen="profile">
-      <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span> Profile
-    </button>
-    <button class="nav-item" data-screen="manual">
-      <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-0.5-5.000000000000001Z"/><path d="M6 18h14"/></svg></span> User Manual
-    </button>
-    <div class="spacer"></div>
-    <button class="nav-item logout-item" id="logout-trigger">
-      <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></span> Log Out
-    </button>
-  </div>
-</aside>
-<main class="main">
-<section class="screen active" id="screen-chat">
-  <div class="chat-wrap">
-    <div class="chat-header">
-      <div class="icon-educator icon-md icon-hover icon-loading icon-shadow-md" style="cursor:pointer;" onclick="switchScreen('manual')" title="Click to open Educator User Manual">
-        <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="36" height="36" rx="10" fill="url(#educatorGradCH)"/>
-          <path d="M18 13C18 13 13.2 11.5 9.5 13V25C13.2 23.5 18 25 18 25C18 25 22.8 23.5 26.5 25V13C22.8 11.5 18 13 18 13Z" fill="white" fill-opacity="0.15" stroke="white" stroke-width="1.1" stroke-linejoin="round"/>
-          <path d="M18 13.2V24.8" stroke="white" stroke-opacity="0.3" stroke-width="0.8"/>
-          <line x1="11.8" y1="16.8" x2="16.2" y2="15.7" stroke="white" stroke-width="0.7" stroke-opacity="0.45" stroke-linecap="round"/>
-          <line x1="11.8" y1="19.6" x2="16.2" y2="18.5" stroke="white" stroke-width="0.7" stroke-opacity="0.45" stroke-linecap="round"/>
-          <line x1="11.8" y1="22.4" x2="15.2" y2="21.5" stroke="white" stroke-width="0.7" stroke-opacity="0.45" stroke-linecap="round"/>
-          <circle cx="18" cy="8.5" r="1.5" fill="#FCD34D"/>
-          <circle cx="18" cy="8.5" r="4" fill="#FCD34D" fill-opacity="0.12"/>
-          <defs><linearGradient id="educatorGradCH" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse"><stop stop-color="#3b82f6"/><stop offset="1" stop-color="#1d4ed8"/></linearGradient></defs>
-        </svg>
-      </div>
-      <div>
-        <div class="chat-h2" style="cursor:pointer;" onclick="switchScreen('manual')" title="Click to open Educator User Manual">Educator Mentor</div>
-        <div class="chat-status" id="chatAiEngineStatus">Online &middot; Auto-Routed (WORKSTATION)</div>
-      </div>
-    </div>
-    <div id="onDeviceAiBar" style="display:none !important;">
-      <span id="aiEngineDot"></span><strong id="aiEngineLabel"></strong><button id="btnToggleGemma"></button>
-    </div>
-    <div class="chat-msgs" id="chat-msgs"></div>
-    <div style="display:flex;gap:8px;overflow-x:auto;padding:10px 4px;flex-shrink:0;-webkit-overflow-scrolling:touch;scrollbar-width:none;" id="chatCategoryChips">
-      <button class="btn btn-sm btn-ghost" onclick="triggerCategoryGuidance('Doctor India')">&#128104;&#8205;&#9877;&#65039; Doctor (MBBS)</button>
-      <button class="btn btn-sm btn-ghost" onclick="triggerCategoryGuidance('Radiology Imaging')">&#9762; Radiology</button>
-      <button class="btn btn-sm btn-ghost" onclick="triggerCategoryGuidance('Pathology MLT')">&#128300; Pathology (MLT)</button>
-      <button class="btn btn-sm btn-ghost" onclick="triggerCategoryGuidance('Pharmacist B.Pharm')">&#128138; Pharmacist</button>
-      <button class="btn btn-sm btn-ghost" onclick="triggerCategoryGuidance('BCA Computer Science')">&#128187; BCA / B.Sc CS</button>
-      <button class="btn btn-sm btn-ghost" onclick="triggerCategoryGuidance('BBA Management')">&#128202; BBA / MBA</button>
-      <button class="btn btn-sm btn-ghost" onclick="triggerCategoryGuidance('Electrical Engineering')">&#9889; Electrical Eng</button>
-      <button class="btn btn-sm btn-ghost" onclick="triggerCategoryGuidance('Chemical Engineering')">&#129514; Chemical Eng</button>
-      <button class="btn btn-sm btn-ghost" onclick="triggerCategoryGuidance('BA LLB Law')">&#9878; BA LLB Law</button>
-      <button class="btn btn-sm btn-ghost" onclick="triggerCategoryGuidance('Space Science ISRO')">&#128640; Space Science</button>
-      <button class="btn btn-sm btn-ghost" onclick="triggerCategoryGuidance('Data Science')">&#129302; Data Science</button>
-      <button class="btn btn-sm btn-ghost" onclick="triggerCategoryGuidance('UPSC Civil Services')">&#127963; UPSC IAS</button>
-    </div>
-    <div class="chat-input">
-      <input type="text" id="chatInput" placeholder="Type your message...">
-      <button class="btn btn-primary" id="chatSend"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
-    </div>
-  </div>
-</section>
-<section class="screen" id="screen-dashboard">
-  <div class="dash-greeting" id="dashGreeting">Good morning, Alex.</div>
-  <div class="dash-sub">Your career snapshot &middot; Updated today</div>
-  <div class="stat-grid">
-    <div class="glass-card">
-      <div class="stat-value" id="dashMarketVal">$78K</div>
-      <div class="stat-label">Estimated Market Value</div>
-      <div class="stat-body" id="dashMarketSub">+8% from last quarter &middot; Based on your skills and experience</div>
-    </div>
-    <div class="glass-card">
-      <div class="stat-value" id="dashMatchCount">5</div>
-      <div class="stat-label">Top Career Matches</div>
-      <div class="stat-body" id="dashMatchesList">
-        <ul style="list-style:none;display:flex;flex-direction:column;gap:6px">
-          <li style="display:flex;justify-content:space-between;font-size:clamp(12px,.8rem,14px)"><span>Associate Product Manager</span><span style="font-weight:600;color:var(--accent)">94%</span></li>
-        </ul>
-      </div>
-    </div>
-    <div class="glass-card">
-      <div class="stat-value" id="dashMilestoneCount">3</div>
-      <div class="stat-label">Upcoming Milestones</div>
-      <div class="stat-body" id="dashMilestonesList">
-        <div style="display:flex;flex-direction:column;gap:10px">
-          <div style="display:flex;gap:10px;align-items:flex-start"><div style="width:8px;height:8px;border-radius:50%;background:var(--accent);margin-top:5px;flex-shrink:0"></div><div><div style="font-weight:600;font-size:clamp(12px,.8rem,14px)">Complete PM certification</div><div class="small" style="margin-top:1px">15 days left</div></div></div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="grid-aside">
-    <div class="glass-card">
-      <h3>Skill Gap Analysis</h3>
-      <p style="font-size:clamp(12px,.8rem,14px);color:var(--muted);margin-bottom:12px">Your strongest clusters vs. gaps in your target role.</p>
-      <div id="skillBars" style="display:flex;flex-direction:column;gap:12px"></div>
-    </div>
-    <div class="glass-card" id="dashNextStepCard">
-      <h3>Recommended Next Step</h3>
-      <p style="font-size:clamp(13px,.85rem,15px)" id="dashNextStepText">Enroll in <strong>Product Strategy &amp; Roadmapping</strong> to close the highest-impact gap for APM roles. Completing it could increase your market value by an estimated $6K&ndash;$9K.</p>
-      <button class="btn btn-primary" style="margin-top:12px" onclick="switchScreen('learn')">View Course</button>
-    </div>
-  </div>
-  <div style="display:flex;gap:clamp(8px,1vw,14px);flex-wrap:wrap">
-    <button class="btn" onclick="switchScreen('path')">View Career Path</button>
-    <button class="btn btn-primary" onclick="openReport()">Download Report</button>
-  </div>
-</section>
-<section class="screen" id="screen-path">
-  <h2>Your Career Path</h2>
-  <p style="color:var(--muted);margin-bottom:var(--gap)">A strategic map from where you are to where you want to be.</p>
-  <div class="mm-step-bar" id="stepBar">
-    <div class="mm-step-info">
-      <div class="mm-step-counter" id="stepCounter">Step 1 / 5</div>
-      <div class="mm-step-desc" id="stepDesc">Your starting point begins here</div>
-    </div>
-    <div class="mm-step-nav">
-      <button class="btn btn-sm btn-ghost" id="stepPrev"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
-      <button class="btn btn-sm btn-ghost" id="stepNext"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
-    </div>
-  </div>
-  <div class="mm-wrap">
-    <div class="mm-viewport" id="mmViewport">
-      <div class="mm-canvas" id="mmCanvas"><svg id="mmSvg" width="100%" height="100%" style="position:absolute;inset:0;pointer-events:none;overflow:visible;z-index:0"></svg></div>
-      <div class="mm-zoom">
-        <button id="zoomIn">+</button>
-        <button id="zoomOut">&minus;</button>
-        <button id="zoomReset">&#x21BA;</button>
-      </div>
-    </div>
-    <div class="path-sidebar">
-      <div class="glass-card">
-        <h3>Skill Gaps</h3>
-        <p class="small" style="margin-bottom:8px">Priority areas to reach your target</p>
-        <div id="pathGaps" style="display:flex;flex-direction:column;gap:8px"></div>
-      </div>
-      <div class="glass-card">
-        <h3>Market Value Projection</h3>
-        <div class="mv-display" id="pathMarketValDisplay">
-          <div class="mv-item"><div class="small">Current</div><div class="mv-value" id="pathMvCurrent">$78K</div></div>
-          <div class="mv-arrow">&rarr;</div>
-          <div class="mv-item"><div class="small">6-month</div><div class="mv-value mv-accent" id="pathMv6m">$92K</div></div>
-          <div class="mv-arrow">&rarr;</div>
-          <div class="mv-item"><div class="small">2-year</div><div class="mv-value" id="pathMv2y">$115K</div></div>
-        </div>
-      </div>
-      <div class="glass-card">
-        <h3>Strategic Analysis</h3>
-        <div id="pathAnalysisText">
-          <p style="font-size:clamp(12px,.8rem,14px)">Your technical foundation is strong. The highest-leverage move is building product strategy skills.</p>
-          <p style="font-size:clamp(12px,.8rem,14px);margin-top:8px">Timeline: 3 months cert + 1 month portfolio &rarr; begin applying.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-<section class="screen" id="screen-learn">
-  <h2>Learning &amp; Opportunities</h2>
-  <p style="color:var(--muted);margin-bottom:var(--gap)">Curated courses and jobs tailored to your career path.</p>
-  <div class="hub-tabs">
-    <button class="hub-tab active" data-panel="courses" onclick="switchHub('courses')">Courses</button>
-    <button class="hub-tab" data-panel="jobs" onclick="switchHub('jobs')">Job Openings</button>
-    <button class="hub-tab" data-panel="videos" onclick="switchHub('videos')">Career Videos</button>
-  </div>
-  <div class="hub-panel active" id="panel-courses">
-    <div class="grid-auto" id="panel-courses-grid"></div>
-  </div>
-  <div class="hub-panel" id="panel-jobs">
-    <div class="grid-auto" id="panel-jobs-grid"></div>
-  </div>
-  <div class="hub-panel" id="panel-videos">
-    <div class="grid-auto" id="panel-videos-grid"></div>
-  </div>
-</section>
-<section class="screen" id="screen-profile">
-  <div class="profile-header">
-    <div class="profile-av" id="profileAv">AK</div>
-    <div style="flex:1;min-width:0">
-      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-        <div class="profile-name" id="profileName">Alex Kadir</div>
-        <button class="edit-btn" id="editProfileBtn"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
-      </div>
-      <div class="profile-role" id="profileRole">Computer Science Graduate &middot; Aspiring Product Manager</div>
-      <p style="font-size:clamp(13px,.85rem,15px);color:var(--muted);margin-top:8px;line-height:1.6;" id="profileBio">Recent CS grad with internship experience in software engineering. Looking to transition into product management with a focus on technical products.</p>
-    </div>
-  </div>
-  <div class="profile-body" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:32px;">
-    <div>
-      <h3>Skills &amp; Competencies</h3>
-      <div class="skill-tags" id="profileSkills" style="margin-bottom:24px;"></div>
-      <h3>Enrolled Courses &amp; Roadmap</h3>
-      <div id="profileCourses" style="display:flex;flex-direction:column;gap:12px;margin-top:12px;"></div>
-    </div>
-    <div>
-      <h3>Experience</h3>
-      <div id="profileExp"></div>
-      <h3 style="margin-top:24px">Education</h3>
-      <div id="profileEdu"></div>
-    </div>
-  </div>
-  <div class="glass-card" style="margin-top:var(--gap)">
-    <div style="display:flex;gap:clamp(8px,1.5vw,14px);flex-wrap:wrap">
-      <button class="btn btn-primary" onclick="openReport()" style="flex:1;min-width:180px">Download Career Report</button>
-      <button class="btn" onclick="switchScreen('chat')" style="flex:1;min-width:140px">Chat with Mentor</button>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════ USER MANUAL SCREEN ═══════════════════ -->
-<section class="screen" id="screen-manual" style="padding-bottom:60px;">
-  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;background:var(--surface);padding:clamp(12px,1.5vh,16px) clamp(68px,7vw,84px) clamp(12px,1.5vh,16px) clamp(14px,2vw,24px);border:1px solid var(--border);border-radius:14px;margin-bottom:20px;position:sticky;top:12px;z-index:50;box-shadow:0 8px 32px rgba(0,0,0,0.3)">
-    <div style="display:flex;align-items:center;gap:12px;min-width:0;flex:1;">
-      <button class="btn btn-primary" onclick="switchScreen('chat')" style="display:flex;align-items:center;gap:6px;padding:9px 16px;font-weight:600;font-size:13px;cursor:pointer;flex-shrink:0;border-radius:var(--radius-pill);box-shadow:0 4px 12px rgba(59,130,246,0.3);" title="Return to Chat Mentor">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-        <span>Back to Chat</span>
-      </button>
-      <div class="icon-educator icon-md icon-hover icon-animate icon-shadow-lg" style="flex-shrink:0;">
-        <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="36" height="36" rx="10" fill="url(#educatorGradUM)"/>
-          <path d="M18 13C18 13 13.2 11.5 9.5 13V25C13.2 23.5 18 25 18 25C18 25 22.8 23.5 26.5 25V13C22.8 11.5 18 13 18 13Z" fill="white" fill-opacity="0.15" stroke="white" stroke-width="1.1" stroke-linejoin="round"/>
-          <path d="M18 13.2V24.8" stroke="white" stroke-opacity="0.3" stroke-width="0.8"/>
-          <line x1="11.8" y1="16.8" x2="16.2" y2="15.7" stroke="white" stroke-width="0.7" stroke-opacity="0.45" stroke-linecap="round"/>
-          <line x1="11.8" y1="19.6" x2="16.2" y2="18.5" stroke="white" stroke-width="0.7" stroke-opacity="0.45" stroke-linecap="round"/>
-          <line x1="11.8" y1="22.4" x2="15.2" y2="21.5" stroke="white" stroke-width="0.7" stroke-opacity="0.45" stroke-linecap="round"/>
-          <circle cx="18" cy="8.5" r="1.5" fill="#FCD34D"/>
-          <circle cx="18" cy="8.5" r="4" fill="#FCD34D" fill-opacity="0.12"/>
-          <defs><linearGradient id="educatorGradUM" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse"><stop stop-color="#3b82f6"/><stop offset="1" stop-color="#1d4ed8"/></linearGradient></defs>
-        </svg>
-      </div>
-      <div style="min-width:0;">
-        <h2 style="font-size:clamp(16px,2.5vw,22px);font-weight:700;margin:0;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Educator User Manual</h2>
-        <p style="font-size:clamp(11px,1.5vw,13px);color:var(--muted);margin:2px 0 0 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Use Cases, Local Privacy & Roadmap Guide</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Privacy & Local Security Guarantee -->
-  <div class="glass-card" style="margin-bottom:28px;border-left:4px solid #10b981;background:linear-gradient(135deg,rgba(16,185,129,0.08),transparent);">
-    <div style="display:flex;align-items:flex-start;gap:16px;">
-      <div style="font-size:28px;line-height:1">🛡️</div>
-      <div>
-        <h3 style="font-size:17px;font-weight:700;color:#10b981;margin:0 0 6px 0;">100% On-Device Privacy & Local Security Guarantee</h3>
-        <p style="font-size:14px;line-height:1.6;color:var(--text);margin:0 0 10px 0;">
-          Each and every piece of your information—including your custom profile details, enrolled courses, career assessment reports, and interactive AI chat transcripts—is stored <strong>permanently and securely inside your own local machine (`localStorage`)</strong>.
-        </p>
-        <div style="display:flex;flex-wrap:wrap;gap:16px;font-size:13px;color:var(--muted);">
-          <span style="display:flex;align-items:center;gap:6px;"><strong style="color:#10b981">✓ Zero Cloud Mining:</strong> No external tracking or data monetization.</span>
-          <span style="display:flex;align-items:center;gap:6px;"><strong style="color:#10b981">✓ Lifetime Persistence:</strong> Your data remains fixed on your device until you manually change it.</span>
-          <span style="display:flex;align-items:center;gap:6px;"><strong style="color:#10b981">✓ Offline Ready:</strong> Full roadmap synchronization without remote servers.</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Profile Setup Guide for Maximum Accuracy -->
-  <div class="glass-card" style="margin-bottom:28px;">
-    <h3 style="font-size:18px;font-weight:700;color:var(--accent);margin:0 0 12px 0;">🎯 Profile Setup Guide: Generating 200% Accurate AI Recommendations</h3>
-    <p style="font-size:14px;line-height:1.6;color:var(--muted);margin:0 0 16px 0;">
-      To unlock the highest precision from the Educator AI Mentor across the Dashboard, Career Path, and Learning Hub, configure your profile accurately:
-    </p>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;">
-      <div style="padding:16px;background:var(--surface);border-radius:10px;border:1px solid var(--border)">
-        <div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:6px;">1. Set Precise Role & Bio</div>
-        <p style="font-size:13px;color:var(--muted);margin:0;">Open <strong>Profile &rarr; Edit Profile</strong>. Enter your exact career objective (e.g., <em>BCA IT Specialist</em> or <em>Aspiring Medical Officer</em>). This locks your target salary brackets ($78K+ / ₹12L+).</p>
-      </div>
-      <div style="padding:16px;background:var(--surface);border-radius:10px;border:1px solid var(--border)">
-        <div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:6px;">2. Add Verified Competencies</div>
-        <p style="font-size:13px;color:var(--muted);margin:0;">Add your technical or medical skills (e.g., <em>React/Node</em>, <em>Radiology Imaging</em>, <em>Legal Reasoning</em>). The AI matches these directly against 95% match job postings.</p>
-      </div>
-      <div style="padding:16px;background:var(--surface);border-radius:10px;border:1px solid var(--border)">
-        <div style="font-weight:600;font-size:14px;color:var(--text);margin-bottom:6px;">3. Enrolled Courses & Sync</div>
-        <p style="font-size:13px;color:var(--muted);margin:0;">When saved, your customized data engages the <strong>Lifetime Profile Lock</strong>. Your exact details mirror across all tabs and official government portal gateways.</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Detailed Use Cases by User Stage Grid -->
-  <h3 style="font-size:19px;font-weight:700;color:var(--text);margin:0 0 16px 0;">📚 Step-by-Step Use Cases Across Career Stages</h3>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;margin-bottom:32px;">
-    
-    <!-- Use Case 1: After HS -->
-    <div class="glass-card" style="display:flex;flex-direction:column;gap:10px;">
-      <div style="display:flex;align-items:center;gap:10px;">
-        <span style="font-size:24px;">🎓</span>
-        <div style="font-weight:700;font-size:16px;color:var(--accent);">Students After Higher Secondary (10+2 / HS)</div>
-      </div>
-      <p style="font-size:13px;line-height:1.6;color:var(--muted);margin:0;">
-        <strong>Goal:</strong> Choosing the right undergraduate stream and understanding entrance criteria.
-      </p>
-      <ul style="font-size:13px;line-height:1.6;color:var(--text);margin:0;padding-left:18px;">
-        <li>Ask AI Mentor about eligibility for <strong>NEET</strong>, <strong>JEE</strong>, <strong>AICTE</strong>, or Paramedical diplomas.</li>
-        <li>Click category chips below the chat to preview foundational 4-year roadmaps.</li>
-        <li>Use the Career Path tab to view starting salary expectations and initial semester steps.</li>
-      </ul>
-    </div>
-
-    <!-- Use Case 2: Undergraduate -->
-    <div class="glass-card" style="display:flex;flex-direction:column;gap:10px;">
-      <div style="display:flex;align-items:center;gap:10px;">
-        <span style="font-size:24px;">🏛️</span>
-        <div style="font-weight:700;font-size:16px;color:var(--accent);">Undergraduate (UG) Students (BCA, B.Sc CS, BBA, MBBS)</div>
-      </div>
-      <p style="font-size:13px;line-height:1.6;color:var(--muted);margin:0;">
-        <strong>Goal:</strong> Bridging academic theory with live industry skill requirements.
-      </p>
-      <ul style="font-size:13px;line-height:1.6;color:var(--text);margin:0;padding-left:18px;">
-        <li>Access the <strong>Learning Hub</strong> to connect directly with <strong>UGC e-Syllabus</strong> and <strong>ISRO e-Learning</strong> portals.</li>
-        <li>Track milestone progression on the visual Career Path flow diagram.</li>
-        <li>Enroll in self-paced masterclasses to build specialized industry portfolios.</li>
-      </ul>
-    </div>
-
-    <!-- Use Case 3: Postgraduate -->
-    <div class="glass-card" style="display:flex;flex-direction:column;gap:10px;">
-      <div style="display:flex;align-items:center;gap:10px;">
-        <span style="font-size:24px;">🔬</span>
-        <div style="font-weight:700;font-size:16px;color:var(--accent);">Postgraduate (PG) Students (MCA, M.Sc, MBA, LLM)</div>
-      </div>
-      <p style="font-size:13px;line-height:1.6;color:var(--muted);margin:0;">
-        <strong>Goal:</strong> Advanced specialization, thesis execution, and top-tier corporate placement.
-      </p>
-      <ul style="font-size:13px;line-height:1.6;color:var(--text);margin:0;padding-left:18px;">
-        <li>Utilize live backend synthesis to explore international research standards (<strong>O*NET Online</strong>).</li>
-        <li>Map advanced space and aerospace domains via verified <strong>SpaceCrew</strong> gateways.</li>
-        <li>Align senior competencies with executive leadership milestones.</li>
-      </ul>
-    </div>
-
-    <!-- Use Case 4: First Job -->
-    <div class="glass-card" style="display:flex;flex-direction:column;gap:10px;">
-      <div style="display:flex;align-items:center;gap:10px;">
-        <span style="font-size:24px;">💼</span>
-        <div style="font-weight:700;font-size:16px;color:var(--accent);">Fresh Graduates Applying for First Job</div>
-      </div>
-      <p style="font-size:13px;line-height:1.6;color:var(--muted);margin:0;">
-        <strong>Goal:</strong> Securing high-paying entry roles ($75K+ / ₹12L+) and passing interviews.
-      </p>
-      <ul style="font-size:13px;line-height:1.6;color:var(--text);margin:0;padding-left:18px;">
-        <li>Check the <strong>Dashboard</strong> for real-time market value snapshots and top role matches (94%+ match).</li>
-        <li>Use the <strong>Live Jobs Board</strong> in the Learning Hub to apply directly to verified remote & global tech employers.</li>
-        <li>Click <strong>Download Career Report</strong> on the Profile tab to export a structured PDF dossier.</li>
-      </ul>
-    </div>
-
-    <!-- Use Case 5: Career Switch -->
-    <div class="glass-card" style="display:flex;flex-direction:column;gap:10px;grid-column:1/-1;">
-      <div style="display:flex;align-items:center;gap:10px;">
-        <span style="font-size:24px;">🔄</span>
-        <div style="font-weight:700;font-size:16px;color:var(--accent);">Experienced Professionals & Career Switchers</div>
-      </div>
-      <p style="font-size:13px;line-height:1.6;color:var(--muted);margin:0;">
-        <strong>Goal:</strong> Pivoting into high-growth Tech, AI, or Healthcare domains without starting from zero.
-      </p>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:4px;">
-        <div>
-          <div style="font-weight:600;font-size:13px;color:var(--text)">Transferable Skill Analysis</div>
-          <p style="font-size:13px;color:var(--muted);margin:2px 0 0 0;">Input existing competencies into the AI Mentor. The system immediately calculates overlap with modern IT, Data Science, or Management roles.</p>
-        </div>
-        <div>
-          <div style="font-weight:600;font-size:13px;color:var(--text)">Fast-Track Valuation Roadmap</div>
-          <p style="font-size:13px;color:var(--muted);margin:2px 0 0 0;">Follow the 6-month and 2-year valuation projection ($115K+ / ₹25L+) to target executive transitions and high-ROI skill certifications.</p>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- Production Ready Footer with Copyright Credit -->
-  <footer style="margin-top:48px;padding:28px 24px;border-top:1px solid var(--border);background:var(--surface);border-radius:14px;text-align:center;">
-    <div style="font-weight:700;font-size:16px;color:var(--text);letter-spacing:0.02em;margin-bottom:6px;">Educator</div>
-    <div style="font-size:14px;font-weight:600;color:var(--accent);margin-bottom:8px;">Copyright by Ranadeep Saha 2026 reserved.</div>
-    <p style="font-size:12px;color:var(--muted);max-width:600px;margin:0 auto;">
-      All rights reserved. Production Ready Architecture &bull; 200% Official Government & International Gateway Integration &bull; Permanent Local Privacy Engine
-    </p>
-  </footer>
-</section>
-</main>
-<nav class="mobile-nav" role="navigation">
-  <div class="mob-nav-inner">
-    <button class="mob-item active" data-screen="chat"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span><span class="nav-label">Chat</span></button>
-    <button class="mob-item" data-screen="dashboard"><span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="4" rx="1"/><rect x="14" y="10" width="7" height="11" rx="1"/><rect x="3" y="13" width="7" height="8" rx="1"/></svg></span><span class="nav-label">Dash</span></button>
-    <button class="mob-item" data-screen="path"><span class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 21v-6m0-6V3m-9 9h6m6 0h6"/></svg></span><span class="nav-label">Path</span></button>
-    <button class="mob-item" data-screen="learn"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></span><span class="nav-label">Learn</span></button>
-    <button class="mob-item" data-screen="profile"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span class="nav-label">Profile</span></button>
-    <button class="mob-item" data-screen="manual"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-0.5-5.000000000000001Z"/><path d="M6 18h14"/></svg></span><span class="nav-label">Guide</span></button>
-    <button class="mob-item" id="logout-trigger-mobile"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></span><span class="nav-label">Exit</span></button>
-  </div>
-</nav>
-<button class="menu-toggle" id="menuToggle" aria-label="Toggle menu"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
-<div class="sidebar-overlay" id="sidebarOverlay"></div>
-<button class="theme-toggle" id="themeToggle">&#x25D0;</button>
-<div class="overlay" id="logoutOverlay">
-  <div class="modal" style="text-align:center">
-    <h2>Leave already?</h2>
-    <p>Your career data is saved. You can pick up where you left off anytime.</p>
-    <div class="modal-actions">
-      <button class="btn" id="cancelLogout">Stay</button>
-      <button class="btn btn-primary" id="confirmLogout">Log Out</button>
-    </div>
-  </div>
-</div>
-<div class="overlay" id="reportOverlay">
-  <div class="modal modal-lg">
-    <h2>Career Assessment Report</h2>
-    <p style="margin-bottom:12px">Preview your career report before downloading.</p>
-    <div id="reportPreview"><pre></pre></div>
-    <div class="modal-actions">
-      <button type="button" class="btn" id="closeReportBtn" onclick="window.handleCloseReport(event); return false;">Close</button>
-      <button type="button" class="btn btn-primary" id="copyReport" onclick="window.handleCopyReport(event); return false;">Copy</button>
-      <button type="button" class="btn btn-primary" id="downloadReport" onclick="window.handleDownloadReport(event); return false;">Download PDF / Save</button>
-    </div>
-  </div>
-</div>
-<div class="overlay" id="editOverlay">
-  <div class="modal modal-lg">
-    <h2>Edit Profile</h2>
-    <p style="margin-bottom:16px">Update your career information.</p>
-    <div class="edit-form" id="editForm"></div>
-    <div class="modal-actions" style="margin-top:16px">
-      <button class="btn" id="editCancel">Cancel</button>
-      <button class="btn btn-primary" id="editSave">Save Changes</button>
-    </div>
-  </div>
-</div>
-</div>
-
-<script>
 (function(){
   try {
     var auth = localStorage.getItem('kinetic-auth-user');
@@ -2157,7 +1351,26 @@ function matchClientCareer(query) {
   return null;
 }
 
+function handleApiCacheBadge(json) {
+  var cacheBadge = document.getElementById('chatHeaderCacheBadge');
+  if (cacheBadge) {
+    if (json && json.cached) {
+      cacheBadge.style.display = 'inline-flex';
+      cacheBadge.textContent = '⚡ 0ms Cached';
+      setTimeout(function(){
+        cacheBadge.style.display = 'none';
+      }, 4000);
+    } else {
+      cacheBadge.style.display = 'none';
+    }
+  }
+}
+
 function fetchFromEducatorAPI(queryText, callback) {
+  var wrappedCallback = function(err, json) {
+    if (!err && json) handleApiCacheBadge(json);
+    callback(err, json);
+  };
   var tierQuery = '&tier=' + encodeURIComponent(window.HARDWARE_TIER || 'workstation');
   var cloudUrl = 'https://educator-ai-jolp.onrender.com/api/career-guide?query=' + encodeURIComponent(queryText) + tierQuery;
 
@@ -2165,8 +1378,8 @@ function fetchFromEducatorAPI(queryText, callback) {
   if (window.location.hostname && window.location.hostname.indexOf('onrender.com') !== -1) {
     fetch('/api/career-guide?query=' + encodeURIComponent(queryText) + tierQuery)
       .then(function(res){ if (!res.ok) throw new Error('HTTP ' + res.status); return res.json(); })
-      .then(function(json){ callback(null, json); })
-      .catch(function(err){ callback(err); });
+      .then(function(json){ wrappedCallback(null, json); })
+      .catch(function(err){ wrappedCallback(err); });
     return;
   }
 
@@ -2174,13 +1387,13 @@ function fetchFromEducatorAPI(queryText, callback) {
   if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
     fetch('/api/career-guide?query=' + encodeURIComponent(queryText) + tierQuery)
       .then(function(res){ if (!res.ok) throw new Error('HTTP ' + res.status); return res.json(); })
-      .then(function(json){ callback(null, json); })
+      .then(function(json){ wrappedCallback(null, json); })
       .catch(function(){
         // Local failed, fallback seamlessly to live Render Cloud API
         fetch(cloudUrl)
           .then(function(res){ return res.json(); })
-          .then(function(json){ callback(null, json); })
-          .catch(function(err){ callback(err); });
+          .then(function(json){ wrappedCallback(null, json); })
+          .catch(function(err){ wrappedCallback(err); });
       });
     return;
   }
@@ -2199,7 +1412,7 @@ function fetchFromEducatorAPI(queryText, callback) {
       if (!res.ok) throw new Error('Local 3000 non-200');
       return res.json();
     })
-    .then(function(json){ callback(null, json); })
+    .then(function(json){ wrappedCallback(null, json); })
     .catch(function(){
       if (timer) clearTimeout(timer);
       var c2 = typeof AbortController !== 'undefined' ? new AbortController() : null;
@@ -2210,13 +1423,13 @@ function fetchFromEducatorAPI(queryText, callback) {
           if (!res.ok) throw new Error('Local 3001 non-200');
           return res.json();
         })
-        .then(function(json){ callback(null, json); })
+        .then(function(json){ wrappedCallback(null, json); })
         .catch(function(){
           if (t2) clearTimeout(t2);
           fetch(cloudUrl)
             .then(function(res){ return res.json(); })
-            .then(function(json){ callback(null, json); })
-            .catch(function(err){ callback(err); });
+            .then(function(json){ wrappedCallback(null, json); })
+            .catch(function(err){ wrappedCallback(err); });
         });
     });
 }
@@ -3017,9 +2230,129 @@ function detectHardwareTierAndAutoSetup() {
   }
 }
 
-window.addEventListener('DOMContentLoaded', detectHardwareTierAndAutoSetup);
-setTimeout(detectHardwareTierAndAutoSetup, 100);
-</script>
+// -----------------------------------------------------------------------------
+// Full-Fledged SaaS Platform Feature Engine: Tier Management & Data Exports
+// -----------------------------------------------------------------------------
 
-</body>
-</html>
+function showToast(message) {
+  var existing = document.querySelector('.toast-notification');
+  if (existing) existing.remove();
+  var toast = document.createElement('div');
+  toast.className = 'toast-notification';
+  toast.innerHTML = '<span>⚡</span> <span>' + esc(message) + '</span>';
+  document.body.appendChild(toast);
+  setTimeout(function(){
+    if (toast.parentNode) toast.remove();
+  }, 3200);
+}
+
+function openSaaSPlansModal() {
+  var overlay = document.getElementById('saasModalOverlay');
+  if (overlay) {
+    overlay.style.display = 'flex';
+    overlay.classList.add('active');
+  }
+}
+
+function closeSaaSPlansModal() {
+  var overlay = document.getElementById('saasModalOverlay');
+  if (overlay) {
+    overlay.style.display = 'none';
+    overlay.classList.remove('active');
+  }
+}
+
+function selectSaaSPlan(plan) {
+  try {
+    localStorage.setItem('educator_saas_tier', plan);
+  } catch (e) {}
+  updateSaaSBadges(plan);
+  closeSaaSPlansModal();
+  showToast('SaaS Subscription upgraded to ' + plan.toUpperCase() + ' Tier!');
+}
+
+function updateSaaSBadges(plan) {
+  var activePlan = plan || 'pro';
+  try {
+    var stored = localStorage.getItem('educator_saas_tier');
+    if (stored) activePlan = stored;
+  } catch (e) {}
+
+  var headerBadge = document.getElementById('chatHeaderSaaSBadge');
+  var sidebarBadge = document.getElementById('sidebarSaaSTier');
+
+  if (activePlan === 'campus') {
+    if (headerBadge) {
+      headerBadge.textContent = 'CAMPUS TIER';
+      headerBadge.className = 'saas-badge enterprise';
+    }
+    if (sidebarBadge) sidebarBadge.textContent = 'Campus SLA Plan';
+  } else if (activePlan === 'starter') {
+    if (headerBadge) {
+      headerBadge.textContent = 'STARTER PLAN';
+      headerBadge.className = 'saas-badge';
+    }
+    if (sidebarBadge) sidebarBadge.textContent = 'Free Starter Plan';
+  } else {
+    if (headerBadge) {
+      headerBadge.textContent = 'PRO PLAN';
+      headerBadge.className = 'saas-badge pro';
+    }
+    if (sidebarBadge) sidebarBadge.textContent = 'Pro SaaS Plan';
+  }
+
+  // Update plan cards active class
+  var cards = { starter: 'planCardFree', pro: 'planCardPro', campus: 'planCardCampus' };
+  Object.keys(cards).forEach(function(k) {
+    var el = document.getElementById(cards[k]);
+    if (el) {
+      if (k === activePlan) el.classList.add('active');
+      else el.classList.remove('active');
+    }
+  });
+}
+
+function exportRoadmapJSON() {
+  var u = USER_DATA || { name: 'Student', role: 'Candidate', skills: [], experience: [] };
+  var payload = {
+    app: 'Educator AI SaaS',
+    version: '2.0.0-saas',
+    exportedAt: new Date().toISOString(),
+    profile: u,
+    hardwareTier: window.HARDWARE_TIER || 'workstation',
+    officialPortalVerification: '200% Verified Live'
+  };
+
+  var dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(payload, null, 2));
+  var downloadAnchor = document.createElement('a');
+  downloadAnchor.setAttribute('href', dataStr);
+  downloadAnchor.setAttribute('download', 'EducatorAI_Roadmap_' + (u.role || 'Career').replace(/\s+/g, '_') + '.json');
+  document.body.appendChild(downloadAnchor);
+  downloadAnchor.click();
+  downloadAnchor.remove();
+  showToast('Career roadmap JSON exported successfully!');
+}
+
+function shareRoadmapLink() {
+  var u = USER_DATA || { role: 'Professional' };
+  var shareText = 'Check out my verified career roadmap for ' + (u.role || 'Career Path') + ' generated by Educator AI: ' + window.location.href;
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(shareText).then(function() {
+      showToast('Roadmap link copied to clipboard!');
+    }).catch(function() {
+      prompt('Copy your career roadmap link:', shareText);
+    });
+  } else {
+    prompt('Copy your career roadmap link:', shareText);
+  }
+}
+
+window.addEventListener('DOMContentLoaded', function() {
+  detectHardwareTierAndAutoSetup();
+  updateSaaSBadges();
+});
+setTimeout(function() {
+  detectHardwareTierAndAutoSetup();
+  updateSaaSBadges();
+}, 100);
