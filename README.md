@@ -10,9 +10,7 @@
 
 ---
 
-## 🌐 Global Cross-Device LLM Architecture & Demographic Tree
-
-![Cross-Device LLM Architecture & Demographic Tree](cross_device_llm_architecture.jpg)
+## 🌐 Global Cross-Device LLM Architecture
 
 Educator AI is engineered with a **cloud-native, multi-tier tree model** that distributes intelligence seamlessly from Render's HTTPS global edge servers right to every device across the planet—whether high-end desktop workstations or low-bandwidth rural mobile phones.
 
