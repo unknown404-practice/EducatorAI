@@ -2231,7 +2231,7 @@ function detectHardwareTierAndAutoSetup() {
 }
 
 // -----------------------------------------------------------------------------
-// Full-Fledged SaaS Platform Feature Engine: Tier Management & Data Exports
+// Career Roadmap Export & Share Engine
 // -----------------------------------------------------------------------------
 
 function showToast(message) {
@@ -2246,77 +2246,11 @@ function showToast(message) {
   }, 3200);
 }
 
-function openSaaSPlansModal() {
-  var overlay = document.getElementById('saasModalOverlay');
-  if (overlay) {
-    overlay.style.display = 'flex';
-    overlay.classList.add('active');
-  }
-}
-
-function closeSaaSPlansModal() {
-  var overlay = document.getElementById('saasModalOverlay');
-  if (overlay) {
-    overlay.style.display = 'none';
-    overlay.classList.remove('active');
-  }
-}
-
-function selectSaaSPlan(plan) {
-  try {
-    localStorage.setItem('educator_saas_tier', plan);
-  } catch (e) {}
-  updateSaaSBadges(plan);
-  closeSaaSPlansModal();
-  showToast('SaaS Subscription upgraded to ' + plan.toUpperCase() + ' Tier!');
-}
-
-function updateSaaSBadges(plan) {
-  var activePlan = plan || 'pro';
-  try {
-    var stored = localStorage.getItem('educator_saas_tier');
-    if (stored) activePlan = stored;
-  } catch (e) {}
-
-  var headerBadge = document.getElementById('chatHeaderSaaSBadge');
-  var sidebarBadge = document.getElementById('sidebarSaaSTier');
-
-  if (activePlan === 'campus') {
-    if (headerBadge) {
-      headerBadge.textContent = 'CAMPUS TIER';
-      headerBadge.className = 'saas-badge enterprise';
-    }
-    if (sidebarBadge) sidebarBadge.textContent = 'Campus SLA Plan';
-  } else if (activePlan === 'starter') {
-    if (headerBadge) {
-      headerBadge.textContent = 'STARTER PLAN';
-      headerBadge.className = 'saas-badge';
-    }
-    if (sidebarBadge) sidebarBadge.textContent = 'Free Starter Plan';
-  } else {
-    if (headerBadge) {
-      headerBadge.textContent = 'PRO PLAN';
-      headerBadge.className = 'saas-badge pro';
-    }
-    if (sidebarBadge) sidebarBadge.textContent = 'Pro SaaS Plan';
-  }
-
-  // Update plan cards active class
-  var cards = { starter: 'planCardFree', pro: 'planCardPro', campus: 'planCardCampus' };
-  Object.keys(cards).forEach(function(k) {
-    var el = document.getElementById(cards[k]);
-    if (el) {
-      if (k === activePlan) el.classList.add('active');
-      else el.classList.remove('active');
-    }
-  });
-}
-
 function exportRoadmapJSON() {
   var u = USER_DATA || { name: 'Student', role: 'Candidate', skills: [], experience: [] };
   var payload = {
-    app: 'Educator AI SaaS',
-    version: '2.0.0-saas',
+    app: 'Educator AI',
+    version: '2.0.0',
     exportedAt: new Date().toISOString(),
     profile: u,
     hardwareTier: window.HARDWARE_TIER || 'workstation',
@@ -2348,11 +2282,5 @@ function shareRoadmapLink() {
   }
 }
 
-window.addEventListener('DOMContentLoaded', function() {
-  detectHardwareTierAndAutoSetup();
-  updateSaaSBadges();
-});
-setTimeout(function() {
-  detectHardwareTierAndAutoSetup();
-  updateSaaSBadges();
-}, 100);
+window.addEventListener('DOMContentLoaded', detectHardwareTierAndAutoSetup);
+setTimeout(detectHardwareTierAndAutoSetup, 100);
