@@ -8,4 +8,6 @@ secrets.json
 *.zip
 My_Comeback_Story.md
 .agents/
+data/query-cache.json
+
 
